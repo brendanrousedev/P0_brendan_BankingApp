@@ -13,7 +13,7 @@ public class Program
         Program program = new Program();
     }
 
-    // TODO: Add comments
+    // TODO: Add comments explaining how the json menu is created
     public Program()
     {
         try

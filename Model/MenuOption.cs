@@ -1,4 +1,4 @@
 public class MenuOption{
-    public string Description { get; set; }
-    public string Method { get; set; }
+    public string Description { get; set; } = "NO OPTION";
+    public string Method { get; set; } = "NO OPTION";
 }
