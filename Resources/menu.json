@@ -1,0 +1,66 @@
+{
+  "AdminMenu": {
+    "1": {
+      "description": "Create a New Account",
+      "method": "CreateNewAccount"
+    },
+    "2": {
+      "description": "Delete an Account",
+      "method": "DeleteAccount"
+    },
+    "3": {
+      "description": "Edit Account Details",
+      "method": "EditAccountDetails"
+    },
+    "4": {
+      "description": "Display Summary",
+      "method": "DisplaySummary"
+    },
+    "5": {
+      "description": "Reset Customer Password",
+      "method": "ResetCustomerPassword"
+    },
+    "6": {
+      "description": "Approve Check Book Request",
+      "method": "ApproveCheckBookRequest"
+    },
+    "0": {
+      "description": "Exit",
+      "method": "Exit"
+    }
+  },
+  "CustomerMenu": {
+    "1": {
+      "description": "Check Account Details",
+      "method": "CheckAccountDetails"
+    },
+    "2": {
+      "description": "Withdraw Funds",
+      "method": "WithdrawFunds"
+    },
+    "3": {
+      "description": "Deposit Funds",
+      "method": "DepositFunds"
+    },
+    "4": {
+      "description": "Transfer Funds",
+      "method": "TransferFunds"
+    },
+    "5": {
+      "description": "View Last 5 Transactions",
+      "method": "ViewLast5Transactions"
+    },
+    "6": {
+      "description": "Request New Check Book",
+      "method": "RequestNewCheckBook"
+    },
+    "7": {
+      "description": "Change Password",
+      "method": "ChangePassword"
+    },
+    "0": {
+      "description": "Exit",
+      "method": "Exit"
+    }
+  }
+}
