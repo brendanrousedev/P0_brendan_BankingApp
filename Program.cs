@@ -11,29 +11,7 @@ public class Program
     public static void Main(string[] args)
     {
         // Define your connection string here
-        // string connectionString = "YourConnectionStringHere";
-
-        // Create a new Admin instance
-        // String password = "password123";
-        // byte[] salt = GenerateSalt();
-        // var newAdmin = new Admin
-        // {
-        //     AdminUsername = "owner",
-        //     PasswordHash = HashPassword("password123", salt), // You need to implement password hashing
-        //     Salt = salt // You need to implement salt generation
-        // };
-
-        // // Insert the new Admin into the database
-        // using (var context = new P0BrendanBankingDbContext())
-        // {
-        //     context.Admins.Add(newAdmin);
-        //     context.SaveChanges();
-        // }
-
-        // Console.WriteLine("New admin has been added to the database.");
-
-        bool isValid = VerifyUser("owner", "password1223");
-        Console.WriteLine($"User verification: {isValid}");
+        
     }
 
     public static string HashPassword(string password, byte[] salt)
