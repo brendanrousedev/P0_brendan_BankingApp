@@ -1,22 +1,45 @@
-﻿using P0_brendan_BankingApp.POCO;
-// USERNAME: owner
-// PASSWORD: password123
-
-using System;
-using System.ComponentModel.Design;
-using System.Security.Cryptography;
-using System.Text;
+﻿using System;
+using System.Collections.Generic;
+using System.IO;
 using Newtonsoft.Json;
-
 
 public class Program
 {
+    private Dictionary<string, Dictionary<string, MenuOption>>? Menu;
+    private const string menuJsonFilePath = "Resources\\menu.json";
 
-    Menu CustomerMenu = new Menu("customer.json");
     public static void Main(string[] args)
     {
-    
+        Program program = new Program();
     }
-    
 
+    // TODO: Add comments
+    public Program()
+    {
+        try
+        {
+            // Initialize Menu in the constructor
+            string json = File.ReadAllText(menuJsonFilePath);
+            Menu = JsonConvert.DeserializeObject<Dictionary<string, Dictionary<string, MenuOption>>>(json);
+
+            if (Menu == null)
+            {
+                Console.WriteLine("Failed to load the menu. Exiting the program.\n\n");
+                DisplayScreen.Goodbye();
+                Environment.Exit(0); // Exit the program
+            }
+        }
+        catch (FileNotFoundException ex)
+        {
+            Console.WriteLine($"File not found: {ex.Message}");
+            DisplayScreen.Goodbye();
+            Environment.Exit(0); // Exit the program
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"An unexpected error occurred: {ex.Message}");
+            DisplayScreen.Goodbye();
+            Environment.Exit(0); // Exit the program
+        }
+    }
 }

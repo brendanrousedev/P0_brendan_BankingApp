@@ -128,3 +128,5 @@ C:\Users\Brendan\revature\P0_brendan_BankingApp\obj\Debug\net8.0\refint\P0_brend
 C:\Users\Brendan\revature\P0_brendan_BankingApp\obj\Debug\net8.0\P0_brendan_BankingApp.pdb
 C:\Users\Brendan\revature\P0_brendan_BankingApp\obj\Debug\net8.0\P0_brendan_BankingApp.genruntimeconfig.cache
 C:\Users\Brendan\revature\P0_brendan_BankingApp\obj\Debug\net8.0\ref\P0_brendan_BankingApp.dll
+C:\Users\Brendan\revature\P0_brendan_BankingApp\bin\Debug\net8.0\Newtonsoft.Json.dll
+C:\Users\Brendan\revature\P0_brendan_BankingApp\obj\Debug\net8.0\P0_brendan_BankingApp.sourcelink.json
