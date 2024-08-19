@@ -38,14 +38,14 @@ ______             _             __    ___           _        _       _
     }
 
 
-    private static void MenuName(string menu)
+    public static void MenuName(string menu)
     {
         Console.WriteLine("*************************");
         Console.WriteLine(menu);
         Console.WriteLine("*************************");
     }
 
-    private static void WaitForKey()
+    public static void WaitForKey()
     {
         Console.Write("\n\nPress any key to continue...");
         Console.ReadKey();

@@ -7,10 +7,30 @@ public class Program
 {
     private Dictionary<string, Dictionary<string, MenuOption>>? Menu;
     private const string menuJsonFilePath = "Resources\\menu.json";
+    private const string INDENT = "    ";
 
     public static void Main(string[] args)
     {
         Program program = new Program();
+        program.Run();
+    }
+
+    public void Run()
+    {
+        Console.Clear();
+        DisplayScreen.Greeting();
+        Console.WriteLine("Welcome to The Bank of Arstotzka");
+        DisplayScreen.WaitForKey();
+
+        // Loop used for the program
+        while (true)
+        {
+            DisplayScreen.MenuName("Select User Type");
+            Console.WriteLine($"{INDENT}1. Administrator");
+            Console.WriteLine($"{INDENT}2. Customer");
+            Console.WriteLine($"{INDENT}0. Exit Program");
+            
+        }
     }
 
     // TODO: Add comments explaining how the json menu is created

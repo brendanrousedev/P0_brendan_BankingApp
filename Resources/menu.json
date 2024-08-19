@@ -1,5 +1,5 @@
 {
-  "AdminMenu": {
+  "Administrator": {
     "1": {
       "description": "Create a New Account",
       "method": "CreateNewAccount"
@@ -29,7 +29,7 @@
       "method": "Exit"
     }
   },
-  "CustomerMenu": {
+  "Customer": {
     "1": {
       "description": "Check Account Details",
       "method": "CheckAccountDetails"
