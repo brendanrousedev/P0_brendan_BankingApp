@@ -13,28 +13,27 @@ public class LoginController
 
     // C# Does only allows primitive types to be declared as const
     // after a readonly field is used, it cannot be modified
-    
-    
+
+
 
     public void Run()
     {
-        string[] options = { ADMINISTRATOR, CUSTOMER, EXIT}; 
+        string[] options = { ADMINISTRATOR, CUSTOMER, EXIT };
 
         bool isRunning = true;
         while (isRunning)
         {
             int selection = io.GetMenuSelection(MENU_NAME, options);
-            switch (selection) 
+            switch (selection)
             {
                 case ADMINISTRATOR_OPTION:
-                    string[] credentials = io.GetCredentials(ADMINISTRATOR);
-                    if (PasswordUtils.VerifyAdmin(credentials[USERNAME_INDEX], credentials[PASSWORD_INDEX]))
+
+                    if (VerifyAdmin())
                     {
                         AdminController ac = new AdminController();
                         io.PrintLoginSuccess();
                         io.PauseOutput();
                         ac.Run();
-                        io.PauseOutput();
                     }
                     else
                     {
@@ -43,16 +42,37 @@ public class LoginController
                     }
                     break;
                 case CUSTOMER_OPTION:
-                    Console.WriteLine("MUST IMPLEMENT CUSTOMER_CONTROLLER");
+                    if (VerifyCustomer())
+                    {
+                        CustomerController cc = new CustomerController();
+                        io.PrintLoginSuccess();
+                        io.PauseOutput();
+                        cc.Run();
+                    }
+                    else
+                    {
+                        io.PrintInvalidCredentials();
+                        io.PauseOutput();
+                    }
                     break;
                 case EXIT_OPTION:
                     isRunning = false;
                     break;
             }
-            
+
         }
     }
 
-    // BuildMenu will return a string array with all the possible options
-    
+    public bool VerifyAdmin()
+    {
+        string[] credentials = io.GetCredentials(ADMINISTRATOR);
+        return PasswordUtils.VerifyAdmin(credentials[USERNAME_INDEX], credentials[PASSWORD_INDEX]);
+    }
+
+    public bool VerifyCustomer()
+    {
+        string[] credentials = io.GetCredentials(CUSTOMER);
+        return PasswordUtils.VerifyCustomer(credentials[USERNAME_INDEX], credentials[PASSWORD_INDEX]);
+    }
+
 }

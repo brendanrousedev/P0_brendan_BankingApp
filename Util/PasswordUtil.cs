@@ -51,5 +51,20 @@ public static class PasswordUtils
             return PasswordUtils.VerifyPassword(password, user.PasswordHash, user.Salt);
         }
     }
+
+    public static bool VerifyCustomer(string username, string password)
+    {
+        using (var context = new P0BrendanBankingDbContext())
+        {
+            var user = context.Customers.SingleOrDefault(c => c.CustomerUsername == username);
+
+            if (user == null)
+            {
+                return false; // User not found
+            }
+
+            return PasswordUtils.VerifyPassword(password, user.PasswordHash, user.Salt);
+        }
+    }
 }
      
