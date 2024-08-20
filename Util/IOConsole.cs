@@ -89,13 +89,53 @@ ______             _             __    ___           _        _       _
             PrintInputException(ex, validOptions);
             PauseOutput();
         }
-        catch (OverflowException ex) 
+        catch (OverflowException ex)
         {
             PrintInputException(ex, validOptions);
             PauseOutput();
         }
-        
+
         return selection;
+    }
+
+    public string[] GetPasswordAndUsername(string message)
+    {
+        string? username = "";
+        string? password = "";
+
+        DisplayMenuName($"Enter {message} Credentials");
+        NewLine();
+        try
+        {
+            Console.Write("Username: ");
+            username = Console.ReadLine();
+        }
+        catch (ArgumentNullException ex)
+        {
+            PrintInputException(ex);
+        }
+        catch (InvalidOperationException ex)
+        {
+            PrintInputException(ex);
+        }
+
+        try
+        {
+            Console.Write("Password: ");
+            password = Console.ReadLine();
+        }
+        catch (ArgumentNullException ex)
+        {
+            PrintInputException(ex);
+        }
+        catch (InvalidOperationException ex)
+        {
+            PrintInputException(ex);
+        }
+
+        // C# Really does not like it if it is possible to pass a null reference to a variable.
+        // ?? will provide a default value if either username or password is null
+        return new string[] { username ?? string.Empty, password ?? string.Empty };
     }
 
     public int GetSelectionAsInt()
@@ -113,7 +153,7 @@ ______             _             __    ___           _        _       _
         {
             validOptions[i] = i + 1;
         }
-        validOptions[options.Length -1] = EXIT;
+        validOptions[options.Length - 1] = EXIT;
 
         return validOptions;
     }
@@ -124,7 +164,7 @@ ______             _             __    ___           _        _       _
     }
 
     public void PauseOutput()
-    {   
+    {
         NewLine();
         Console.Write("Enter any key to continue...");
         Console.ReadKey();
