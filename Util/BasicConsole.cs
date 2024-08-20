@@ -19,5 +19,6 @@ public interface BasicConsole {
     public void DisplayReturnToMainMenu();
     public string GetLineFromUser(string message);
     public void DisplayDoesNotExist(string username);
+    public void DisplayNote(string note);
     
 }

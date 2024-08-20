@@ -25,5 +25,10 @@ public class CustomerDao
         return customer.CustomerId;
     }
 
+    public bool CustomerExists(string username)
+    {
+        return Context.Customers.Any(c => c.CustomerUsername == username);
+    }
+
 
 }

@@ -27,14 +27,9 @@ public class AdminController
                 APPROVE_CHECKBOOK = "Approve Checkbook Request",
                 EXIT = "Exit to Main Menu";
 
-    const string CONFIRM_EXIT = "Are you sure you want to return to the main menu?";
+    const string CONFIRM_EXIT = "Return to the main menu?";
     // INSERT DAO objects here
-    private CustomerDao? customerDao;
-
-    public AdminController()
-    {
-        CustomerDao customerDao = new CustomerDao(new P0BrendanBankingDbContext());
-    }
+    private CustomerDao? customerDao =  new CustomerDao(new P0BrendanBankingDbContext());
 
     public void Run()
     {
@@ -79,7 +74,9 @@ public class AdminController
     public void CreateAccount()
     {
         string? username = "";
-        
+        int customerId = -1;
+        Customer? customer = null;
+
         // This method, along with CreateCustomer(), will create a new customer and account in the
         // DB. However, if the Customer already exists, CreateCustomer() will not run
 
@@ -87,32 +84,36 @@ public class AdminController
         // The admin will then create a customer for the DB.
         // Cannot have an account unless there is a customer
         io.DisplayMenuName("Create a New Account");
-        username = io.GetLineFromUser("Enter the username of an existing customer " +
-            "\nor for a customer you'd like to create");
-        
-        Customer? customer = customerDao.GetCustomerByUsername(username);
-        int customerId = 0;
+        io.DisplayNote("If the customer does not yet exist in the database,\n" +
+                       "you will be given an opportunity to create that Customer.");
 
-        if (customer == null)
+        username = io.GetLineFromUser("Enter the username for the customer");
+        try 
         {
+            Console.WriteLine("IN THE TRY BLOCK");
+            customer = customerDao.GetCustomerByUsername(username);
+        }
+        catch (NullReferenceException ex)
+        {
+            Console.WriteLine("Caught NullReferenceException");
+            io.PauseOutput();
             io.DisplayDoesNotExist(username);
-            if (io.Confirm($"Add {username} to the database?"))
+            if(io.Confirm($"Add {username} to the database?"))
             {
-                customerId = CreateCustomer(username);
+                CreateCustomer(username);
             }
-            
         }
 
-        customer = customerDao.GetCustomerById(customerId);
-        
-        Console.WriteLine("CHECKING CUSTOMER RETRIEVED");
-        Console.WriteLine("id = " + customer.CustomerId);
-        Console.WriteLine("customername = " + customer.CustomerId);
+        // The customer should now exist in the Database
+        // Console.WriteLine("CHECKING CUSTOMER RETRIEVED");
+        // Console.WriteLine("id = " + customer.CustomerId);
+        // Console.WriteLine("customername = " + customer.CustomerId);
 
     }
 
     public int CreateCustomer(string username)
     {
+        io.DisplayMenuName("Create a New Customer");
         Customer newCustomer = new Customer();
         newCustomer.CustomerUsername = username;
 

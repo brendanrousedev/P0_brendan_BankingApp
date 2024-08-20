@@ -193,7 +193,7 @@ ______             _             __    ___           _        _       _
     public bool Confirm(string message)
     {
         NewLine();
-        Console.Write($"{message} (Enter 'y' for Yes): ");
+        Console.Write($"{message} (Enter 'y' for Yes, any other key for No): ");
         string? option = Console.ReadLine()?.Trim().ToLower();
         if (string.IsNullOrEmpty(option))
         {
@@ -233,7 +233,14 @@ ______             _             __    ___           _        _       _
 
     public void DisplayDoesNotExist(string username)
     {
+        NewLine();
         Console.WriteLine($"{username} does not exist.");
     }
 
+    public void DisplayNote(string note)
+    {
+        NewLine();
+        Console.Write($"Note: {note}");
+        NewLine();
+    }
 }
