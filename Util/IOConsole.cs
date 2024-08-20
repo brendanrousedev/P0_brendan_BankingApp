@@ -131,6 +131,7 @@ ______             _             __    ___           _        _       _
         }
         catch (InvalidOperationException ex)
         {
+            NewLine();
             PrintInputException(ex);
         }
 
