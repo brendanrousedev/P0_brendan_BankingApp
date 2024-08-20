@@ -45,9 +45,4 @@ ______             _             __    ___           _        _       _
         Console.WriteLine("*************************");
     }
 
-    public static void WaitForKey()
-    {
-        Console.Write("\n\nPress any key to continue...");
-        Console.ReadKey();
-    }
 }
