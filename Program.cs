@@ -20,13 +20,17 @@ public class Program
         io.DisplayGreeting(); // Display greeting to the user
         io.PauseOutput();
         // Start LoginController to get login credentials
-        LoginController lc = new LoginController();
-        lc.Run();
+        bool isRunning = true;
+        // Main while loop for program
+        while (isRunning)
+        {
+            LoginController lc = new LoginController();
+            lc.Run();
+        }
 
 
-        
     }
 
     // TODO: Add comments explaining how the json menu is created
-    
+
 }
