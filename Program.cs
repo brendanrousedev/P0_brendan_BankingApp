@@ -43,7 +43,7 @@ public class Program
             lc.Run();
 
             // Once the Run method ends for lc, then the user must have selected the option to exit the program
-            if (io.ConfirmExit())
+            if (io.ConfirmExit("Are you sure you want to close the program?"))
             {
                 isRunning = false;
             }

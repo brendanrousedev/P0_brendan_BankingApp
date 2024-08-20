@@ -190,10 +190,10 @@ ______             _             __    ___           _        _       _
         Console.WriteLine("Please check your password and account name and try again.");
     }
 
-    public bool ConfirmExit()
+    public bool ConfirmExit(string message)
     {
         NewLine();
-        Console.Write("Are you sure you want to exit? (Enter 'y' for Yes): ");
+        Console.Write($"{message} (Enter 'y' for Yes): ");
         string? option = Console.ReadLine()?.Trim().ToLower();
         if (string.IsNullOrEmpty(option))
         {

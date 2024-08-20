@@ -9,15 +9,17 @@ public class LoginController
     BasicConsole io = new IOConsole();
     const int ADMINISTRATOR_OPTION = 1, CUSTOMER_OPTION = 2, EXIT_OPTION = 0; // These values relate to how they will be displayed to the user
     const int USERNAME_INDEX = 0, PASSWORD_INDEX = 1; // These will get their element in the credentials array
-    const string ADMINISTRATOR = "Administrator", CUSTOMER = "Customer";
+    const string ADMINISTRATOR = "Administrator", CUSTOMER = "Customer", EXIT = "Exit Program";
 
     // C# Does only allows primitive types to be declared as const
     // after a readonly field is used, it cannot be modified
-    readonly string[] options = { "Administrator", "Customer", "Exit"}; 
+    
     
 
     public void Run()
     {
+        string[] options = { ADMINISTRATOR, CUSTOMER, EXIT}; 
+        
         bool isRunning = true;
         while (isRunning)
         {
