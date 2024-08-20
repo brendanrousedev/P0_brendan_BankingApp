@@ -18,7 +18,7 @@ public class CustomerController
                 REQUEST_CHECKBOOK = "Request a New Check Book",
                 EXIT = "Exit to Main Menu";
 
-    const string CONFIRM_EXIT = "Are you sure you want to return to the main menu?";
+    const string CONFIRM_EXIT = "Return to the main menu?";
 
     public void Run()
     {
