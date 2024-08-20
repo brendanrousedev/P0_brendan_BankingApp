@@ -43,6 +43,8 @@ ______             _             __    ___           _        _       _
                                                                                 
 
         ");
+        Console.WriteLine("Welcome to The Bank of Arstotzka");
+
     }
 
     public void DisplayMenuName(string menu)
@@ -50,7 +52,6 @@ ______             _             __    ___           _        _       _
         Console.WriteLine("*************************");
         Console.WriteLine(menu);
         Console.WriteLine("*************************");
-        this.NewLine();
     }
 
     public int GetMenuSelection(string menuName, string[] options)
@@ -58,6 +59,7 @@ ______             _             __    ___           _        _       _
         int[] validOptions = GetValidOptions(options);
         int selection = -1;
 
+        Clear();
         DisplayMenuName(menuName);
         NewLine();
 
@@ -74,16 +76,23 @@ ______             _             __    ___           _        _       _
             selection = Convert.ToInt32(Console.ReadLine());
             if (!validOptions.Contains(selection))
             {
-                throw new ArgumentOutOfRangeException($"Error: Your option must be {string.Join(", ", validOptions)}");
+                throw new ArgumentOutOfRangeException();
             }
         }
         catch (ArgumentOutOfRangeException ex)
         {
-            Console.WriteLine(ex.Message);
+            PrintInputException(ex, validOptions);
+            PauseOutput();
         }
         catch (FormatException ex)
         {
-            Console.WriteLine($"Error: Your option must be {string.Join(", ", validOptions)}");
+            PrintInputException(ex, validOptions);
+            PauseOutput();
+        }
+        catch (OverflowException ex) 
+        {
+            PrintInputException(ex, validOptions);
+            PauseOutput();
         }
         
         return selection;
@@ -115,8 +124,22 @@ ______             _             __    ___           _        _       _
     }
 
     public void PauseOutput()
-    {
+    {   
+        NewLine();
         Console.Write("Enter any key to continue...");
         Console.ReadKey();
+    }
+
+    public void PrintInputException(Exception ex, int[] validOptions)
+    {
+        NewLine();
+        Console.WriteLine($"Error: {ex.Message}", ex);
+        Console.WriteLine($"Valid selections are: {string.Join(", ", validOptions)}");
+    }
+
+    public void PrintInputException(Exception ex)
+    {
+        NewLine();
+        Console.WriteLine($"Error: {ex.Message}", ex);
     }
 }

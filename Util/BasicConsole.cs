@@ -10,5 +10,7 @@ public interface BasicConsole {
     public void DisplayMenuName(string menu);
     public void Clear();
     public void NewLine();
+    public void PrintInputException(Exception ex, int[] validOptions);
+    public void PrintInputException(Exception ex);
     
 }

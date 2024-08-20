@@ -16,7 +16,7 @@ public class Program
 
     public void Run()
     {
-        Console.Clear(); // Clear the console to ready the program
+        io.Clear(); // Clear the console to ready the program
         io.DisplayGreeting(); // Display greeting to the user
         io.PauseOutput();
         // Start LoginController to get login credentials
