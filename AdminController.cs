@@ -1,4 +1,4 @@
-public class ADMIN_CONTROLLER
+public class AdminController
 {
     const string MENU_NAME = "Administrator Menu";
     BasicConsole io = new IOConsole();
