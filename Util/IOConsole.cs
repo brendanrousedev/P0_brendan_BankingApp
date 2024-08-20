@@ -190,7 +190,7 @@ ______             _             __    ___           _        _       _
         Console.WriteLine("Please check your password and account name and try again.");
     }
 
-    public bool ConfirmExit(string message)
+    public bool Confirm(string message)
     {
         NewLine();
         Console.Write($"{message} (Enter 'y' for Yes): ");
@@ -213,4 +213,27 @@ ______             _             __    ___           _        _       _
         Clear();
         DisplayMenuName("Logging out and returning to the main menu...");
     }
+
+    public string GetLineFromUser(string message)
+    {
+        NewLine();
+        try
+        {
+            Console.Write($"{message}: ");
+            string? line = Console.ReadLine();
+        }
+        catch (Exception ex)
+        {
+            PrintInputException(ex);
+        }
+
+        return message;
+
+    }
+
+    public void DisplayDoesNotExist(string username)
+    {
+        Console.WriteLine($"{username} does not exit.");
+    }
+
 }

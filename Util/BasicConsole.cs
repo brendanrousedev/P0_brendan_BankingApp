@@ -14,8 +14,10 @@ public interface BasicConsole {
     public void PrintInputException(Exception ex);
     public void PrintInvalidCredentials();
     public string[] GetCredentials(string message);
-    public bool ConfirmExit(string message);
+    public bool Confirm(string message);
     public void PrintLoginSuccess();
     public void DisplayReturnToMainMenu();
+    public string GetLineFromUser(string message);
+    public void DisplayDoesNotExist(string username);
     
 }

@@ -1,10 +1,11 @@
+using P0_brendan_BankingApp.POCO;
+
 /******************************************************************************
 * Author: Brendan Rouse
 *
+* AdminController orceshtrates all of its operations as well as implements all the 
+* necessary operations for an Admin user
 *
-*
-* SSGeekAdminController orchestrates all of its operations through a series of menus. It relies
-* on other classes for the details of interacting with the user and with the database.
 *******************************************************************************/
 
 public class AdminController
@@ -39,7 +40,7 @@ public class AdminController
             switch (selection)
             {
                 case CREATE_ACCOUNT_OPTION:
-                    Console.WriteLine("CREATE ACCOUNT");
+                    CreateAccount();
                     break;
                 case DELETE_ACCOUNT_OPTION:
                     Console.WriteLine("DELETE ACCOUNT");
@@ -57,7 +58,7 @@ public class AdminController
                     Console.WriteLine("APPROVE CHECKBOOK");
                     break;
                 case EXIT_OPTION:
-                    if (io.ConfirmExit(CONFIRM_EXIT))
+                    if (io.Confirm(CONFIRM_EXIT))
                     {
                         isRunning = false;
                     }
@@ -66,6 +67,53 @@ public class AdminController
         }
 
         io.DisplayReturnToMainMenu();
+    }
+
+    public void CreateAccount()
+    {
+        string? username = "";
+        CustomerDao dao = new CustomerDao(new P0BrendanBankingDbContext());
+        // This method, along with CreateCustomer(), will create a new customer and account in the
+        // DB. However, if the Customer already exists, CreateCustomer() will not run
+
+        // The admin will start by entering the username. If that user does NOT exist in the DB,
+        // The admin will then create a customer for the DB.
+        // Cannot have an account unless there is a customer
+        io.DisplayMenuName("Create a New Account");
+        username = io.GetLineFromUser("Enter the username of an existing customer " +
+            "\nor for a customer you'd like to create");
+        
+        Customer? customer = dao.GetCustomerByUsername(username);
+
+        if (customer == null)
+        {
+            io.DisplayDoesNotExist(username);
+            if (io.Confirm($"Add {username} to the database?"))
+            {
+                CreateCustomer(username);
+            }
+        }
+        
+        Console.WriteLine("CHECKING CUSTOMER RETRIEVED");
+        Console.WriteLine("id = " + customer.CustomerId);
+        Console.WriteLine("customername = " + customer.CustomerId);
+
+    }
+
+    public int CreateCustomer(string username)
+    {
+        Customer newCustomer = new Customer();
+        newCustomer.CustomerUsername = username;
+
+        // All new customers will be assigned 'password1' and will have the opportunity to reset their password
+        string password = "password1";
+        byte[] salt = PasswordUtils.GenerateSalt();
+        newCustomer.PasswordHash = PasswordUtils.HashPassword(password, salt);
+        newCustomer.Salt = salt;
+
+        
+
+
     }
 
 }
