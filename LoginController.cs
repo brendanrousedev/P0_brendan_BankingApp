@@ -19,7 +19,7 @@ public class LoginController
     public void Run()
     {
         string[] options = { ADMINISTRATOR, CUSTOMER, EXIT}; 
-        
+
         bool isRunning = true;
         while (isRunning)
         {
@@ -30,7 +30,10 @@ public class LoginController
                     string[] credentials = io.GetCredentials(ADMINISTRATOR);
                     if (PasswordUtils.VerifyAdmin(credentials[USERNAME_INDEX], credentials[PASSWORD_INDEX]))
                     {
-                        Console.WriteLine("MUST IMPLEMENT ADMIN_CONTROLLER");
+                        AdminController ac = new AdminController();
+                        io.PrintLoginSuccess();
+                        io.PauseOutput();
+                        ac.Run();
                         io.PauseOutput();
                     }
                     else

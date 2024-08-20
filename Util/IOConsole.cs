@@ -131,7 +131,6 @@ ______             _             __    ___           _        _       _
         }
         catch (InvalidOperationException ex)
         {
-            NewLine();
             PrintInputException(ex);
         }
 
@@ -203,8 +202,9 @@ ______             _             __    ___           _        _       _
         return option == "y";
     }
 
-    public bool ConfirmReturnToMainMenu()
+    public void PrintLoginSuccess()
     {
-        throw new NotImplementedException();
+        Clear();
+        DisplayMenuName("Successfully Logged in!");
     }
 }
