@@ -1,20 +1,24 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\Brendan\\revature\\P0_brendan_BankingApp\\P0_brendan_BankingApp.csproj": {}
+    "C:\\Users\\brend\\revature\\P0_brendan_BankingApp\\P0_brendan_BankingApp.csproj": {}
   },
   "projects": {
-    "C:\\Users\\Brendan\\revature\\P0_brendan_BankingApp\\P0_brendan_BankingApp.csproj": {
+    "C:\\Users\\brend\\revature\\P0_brendan_BankingApp\\P0_brendan_BankingApp.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\Brendan\\revature\\P0_brendan_BankingApp\\P0_brendan_BankingApp.csproj",
+        "projectUniqueName": "C:\\Users\\brend\\revature\\P0_brendan_BankingApp\\P0_brendan_BankingApp.csproj",
         "projectName": "P0_brendan_BankingApp",
-        "projectPath": "C:\\Users\\Brendan\\revature\\P0_brendan_BankingApp\\P0_brendan_BankingApp.csproj",
-        "packagesPath": "C:\\Users\\Brendan\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\Brendan\\revature\\P0_brendan_BankingApp\\obj\\",
+        "projectPath": "C:\\Users\\brend\\revature\\P0_brendan_BankingApp\\P0_brendan_BankingApp.csproj",
+        "packagesPath": "C:\\Users\\brend\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\brend\\revature\\P0_brendan_BankingApp\\obj\\",
         "projectStyle": "PackageReference",
+        "fallbackFolders": [
+          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
+        ],
         "configFilePaths": [
-          "C:\\Users\\Brendan\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\brend\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
@@ -87,7 +91,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.304/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.401/PortableRuntimeIdentifierGraph.json"
         }
       }
     }

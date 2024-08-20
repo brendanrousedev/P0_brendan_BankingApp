@@ -4147,23 +4147,28 @@
       "Microsoft.EntityFrameworkCore.SqlServer >= 8.0.8",
       "Microsoft.entityframeworkCore.design >= 8.0.8",
       "Microsoft.entityframeworkcore.Tools >= 8.0.8",
-      "Newtonsoft.json >= 13.0.3"
+      "Newtonsoft.Json >= 13.0.3"
     ]
   },
   "packageFolders": {
-    "C:\\Users\\Brendan\\.nuget\\packages\\": {}
+    "C:\\Users\\brend\\.nuget\\packages\\": {},
+    "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\Brendan\\revature\\P0_brendan_BankingApp\\P0_brendan_BankingApp.csproj",
+      "projectUniqueName": "C:\\Users\\brend\\revature\\P0_brendan_BankingApp\\P0_brendan_BankingApp.csproj",
       "projectName": "P0_brendan_BankingApp",
-      "projectPath": "C:\\Users\\Brendan\\revature\\P0_brendan_BankingApp\\P0_brendan_BankingApp.csproj",
-      "packagesPath": "C:\\Users\\Brendan\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\Brendan\\revature\\P0_brendan_BankingApp\\obj\\",
+      "projectPath": "C:\\Users\\brend\\revature\\P0_brendan_BankingApp\\P0_brendan_BankingApp.csproj",
+      "packagesPath": "C:\\Users\\brend\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\brend\\revature\\P0_brendan_BankingApp\\obj\\",
       "projectStyle": "PackageReference",
+      "fallbackFolders": [
+        "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
+      ],
       "configFilePaths": [
-        "C:\\Users\\Brendan\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\brend\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [
@@ -4215,7 +4220,7 @@
             "target": "Package",
             "version": "[8.0.8, )"
           },
-          "Newtonsoft.json": {
+          "Newtonsoft.Json": {
             "target": "Package",
             "version": "[13.0.3, )"
           }
@@ -4236,7 +4241,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.304/PortableRuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.401/PortableRuntimeIdentifierGraph.json"
       }
     }
   }
