@@ -1,3 +1,12 @@
+/******************************************************************************
+* Author: Brendan Rouse
+*
+*
+*
+* SSGeekAdminController orchestrates all of its operations through a series of menus. It relies
+* on other classes for the details of interacting with the user and with the database.
+*******************************************************************************/
+
 public class AdminController
 {
     const string MENU_NAME = "Administrator Menu";
