@@ -3,13 +3,27 @@ using P0_brendan_BankingApp.POCO;
 
 public class CustomerDao 
 {
-    P0BrendanBankingDbContext DBContext;
+    P0BrendanBankingDbContext Context;
     public CustomerDao(P0BrendanBankingDbContext context)
     {
-        DBContext = context;
+        Context = context;
     }
     public Customer? GetCustomerByUsername(string customerUsername)
     {
-        return DBContext.Customers.SingleOrDefault(c => c.CustomerUsername == customerUsername);
+        return Context.Customers.SingleOrDefault(c => c.CustomerUsername == customerUsername);
     }
+
+    public Customer GetCustomerById(int id)
+    {
+        return Context.Customers.Find(id);
+    }
+
+    public int CreateNewCustomer(Customer customer)
+    {
+        Context.Customers.Add(customer);
+        Context.SaveChanges();
+        return customer.CustomerId;
+    }
+
+
 }

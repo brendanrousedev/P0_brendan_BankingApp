@@ -52,7 +52,7 @@ public class CustomerController
                     Console.WriteLine("UPDATE PASSWORD");
                     break;
                 case EXIT_OPTION:
-                    if (io.ConfirmExit(CONFIRM_EXIT))
+                    if (io.Confirm(CONFIRM_EXIT))
                     {
                         isRunning = false;
                     }

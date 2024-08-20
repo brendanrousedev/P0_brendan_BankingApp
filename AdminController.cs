@@ -28,6 +28,13 @@ public class AdminController
                 EXIT = "Exit to Main Menu";
 
     const string CONFIRM_EXIT = "Are you sure you want to return to the main menu?";
+    // INSERT DAO objects here
+    private CustomerDao? customerDao;
+
+    public AdminController()
+    {
+        CustomerDao customerDao = new CustomerDao(new P0BrendanBankingDbContext());
+    }
 
     public void Run()
     {
@@ -72,7 +79,7 @@ public class AdminController
     public void CreateAccount()
     {
         string? username = "";
-        CustomerDao dao = new CustomerDao(new P0BrendanBankingDbContext());
+        
         // This method, along with CreateCustomer(), will create a new customer and account in the
         // DB. However, if the Customer already exists, CreateCustomer() will not run
 
@@ -83,16 +90,20 @@ public class AdminController
         username = io.GetLineFromUser("Enter the username of an existing customer " +
             "\nor for a customer you'd like to create");
         
-        Customer? customer = dao.GetCustomerByUsername(username);
+        Customer? customer = customerDao.GetCustomerByUsername(username);
+        int customerId = 0;
 
         if (customer == null)
         {
             io.DisplayDoesNotExist(username);
             if (io.Confirm($"Add {username} to the database?"))
             {
-                CreateCustomer(username);
+                customerId = CreateCustomer(username);
             }
+            
         }
+
+        customer = customerDao.GetCustomerById(customerId);
         
         Console.WriteLine("CHECKING CUSTOMER RETRIEVED");
         Console.WriteLine("id = " + customer.CustomerId);
@@ -111,7 +122,7 @@ public class AdminController
         newCustomer.PasswordHash = PasswordUtils.HashPassword(password, salt);
         newCustomer.Salt = salt;
 
-        
+        return customerDao.CreateNewCustomer(newCustomer);
 
 
     }

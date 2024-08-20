@@ -13,6 +13,8 @@ make presentation
 Transaction Columns:
 PK_transactionId, FK_accountId, type (withdraw, deposit, transfer), money, date
 
+Fix all the possible null references
+
 
 Presentation
 

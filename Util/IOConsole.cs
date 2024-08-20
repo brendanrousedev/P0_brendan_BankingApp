@@ -233,7 +233,7 @@ ______             _             __    ___           _        _       _
 
     public void DisplayDoesNotExist(string username)
     {
-        Console.WriteLine($"{username} does not exit.");
+        Console.WriteLine($"{username} does not exist.");
     }
 
 }
