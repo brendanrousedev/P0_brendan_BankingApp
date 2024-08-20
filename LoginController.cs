@@ -5,7 +5,6 @@ using Microsoft.EntityFrameworkCore.Metadata.Conventions;
 public class LoginController
 {
 
-    const string INDENT = "    ";
     const string MENU_NAME = "What type of user are you?";
     BasicConsole io = new IOConsole();
     const int ADMINISTRATOR_OPTION = 1, CUSTOMER_OPTION = 2, EXIT_OPTION = 0; // These values relate to how they will be displayed to the user
@@ -29,7 +28,7 @@ public class LoginController
                     string[] credentials = io.GetCredentials(ADMINISTRATOR);
                     if (PasswordUtils.VerifyAdmin(credentials[USERNAME_INDEX], credentials[PASSWORD_INDEX]))
                     {
-                        Console.WriteLine("SUCCESSFULLY LOGGED");
+                        Console.WriteLine("MUST IMPLEMENT ADMIN_CONTROLLER");
                         io.PauseOutput();
                     }
                     else
