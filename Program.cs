@@ -6,6 +6,8 @@ using Newtonsoft.Json;
 public class Program
 {
 
+    public BasicConsole io = new IOConsole();
+
     public static void Main(string[] args)
     {
         Program program = new Program();
@@ -15,8 +17,8 @@ public class Program
     public void Run()
     {
         Console.Clear(); // Clear the console to ready the program
-        IOConsole.DisplayGreeting(); // Display greeting to the user
-
+        io.DisplayGreeting(); // Display greeting to the user
+        io.PauseOutput();
         // Start LoginController to get login credentials
         LoginController lc = new LoginController();
         lc.Run();
