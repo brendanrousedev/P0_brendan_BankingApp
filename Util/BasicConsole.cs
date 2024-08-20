@@ -12,6 +12,8 @@ public interface BasicConsole {
     public void NewLine();
     public void PrintInputException(Exception ex, int[] validOptions);
     public void PrintInputException(Exception ex);
-    public string[] GetPasswordAndUsername(string message);
+    public void PrintInvalidCredentials();
+    public string[] GetCredentials(string message);
+    public bool ConfirmExit();
     
 }

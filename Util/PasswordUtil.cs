@@ -1,6 +1,7 @@
 using System;
 using System.Linq;
 using System.Security.Cryptography;
+using P0_brendan_BankingApp.POCO;
 
 public static class PasswordUtils
 {
@@ -34,6 +35,21 @@ public static class PasswordUtils
     {
         var hashOfEnteredPassword = HashPassword(enteredPassword, storedSalt);
         return hashOfEnteredPassword == storedHash;
+    }
+
+    public static bool VerifyAdmin(string username, string password)
+    {
+        using (var context = new P0BrendanBankingDbContext())
+        {
+            var user = context.Admins.SingleOrDefault(u => u.AdminUsername == username);
+
+            if (user == null)
+            {
+                return false; // User not found
+            }
+
+            return PasswordUtils.VerifyPassword(password, user.PasswordHash, user.Salt);
+        }
     }
 }
      

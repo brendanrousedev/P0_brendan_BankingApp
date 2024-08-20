@@ -13,6 +13,9 @@ using Newtonsoft.Json;
 * this project, I decided it was necessary to list the username and password below
 * for reference, so a user can sign in as a Admin and begin performing necessary 
 * operations to perform DB operations. 
+*
+* username: owner
+* password: password123
 *******************************************************************************/
 
 public class Program
@@ -38,6 +41,8 @@ public class Program
         {
             LoginController lc = new LoginController();
             lc.Run();
+
+            
         }
 
 

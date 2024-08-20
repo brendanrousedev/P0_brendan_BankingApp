@@ -49,6 +49,7 @@ ______             _             __    ___           _        _       _
 
     public void DisplayMenuName(string menu)
     {
+        Clear();
         Console.WriteLine("*************************");
         Console.WriteLine(menu);
         Console.WriteLine("*************************");
@@ -98,7 +99,7 @@ ______             _             __    ___           _        _       _
         return selection;
     }
 
-    public string[] GetPasswordAndUsername(string message)
+    public string[] GetCredentials(string message)
     {
         string? username = "";
         string? password = "";
@@ -181,5 +182,16 @@ ______             _             __    ___           _        _       _
     {
         NewLine();
         Console.WriteLine($"Error: {ex.Message}", ex);
+    }
+
+    public void PrintInvalidCredentials()
+    {
+        NewLine();
+        Console.WriteLine("Please check your password and account name and try again.");
+    }
+
+    public bool ConfirmExit()
+    {
+        throw new NotImplementedException();
     }
 }
