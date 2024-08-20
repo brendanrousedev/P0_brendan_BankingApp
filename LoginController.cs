@@ -1,13 +1,24 @@
+using System.Reflection;
 using Microsoft.EntityFrameworkCore.Metadata.Conventions;
 
-public class BankingAppController
+public class LoginController
 {
 
     const string INDENT = "    ";
-    private void Displ()
+    
+
+    public void Run()
+    {
+        while (true)
+        {
+            DisplayMenu();
+        }
+    }
+    private void DisplayMenu()
     {
 
-        DisplayScreen.MenuName("User Login");
+        IOConsole.DisplayMenuName("User Login");
+        Console.WriteLine();
         string ADMIN_LOGIN = "Administrator";
         string CUSTOMER_LOGIN = "Customer";
         string EXIT = "Exit the program";
