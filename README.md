@@ -4,7 +4,8 @@ CURRENT TASKS:
 
 
 TODO:
-Need to implement skeleton
+ADD A CHECK TO ENSURE USERNAME IS LONG ENOUGH
+ADD A CHECK TO ENSURE PASSWORD IS VALID
 Add Transaction table to DB - How will I alter the db context.cs? 
 Add the ability for an admin to create other admins.
 Add comments to code

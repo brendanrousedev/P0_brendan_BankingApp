@@ -72,44 +72,52 @@ public class AdminController
     }
 
     public void CreateAccount()
+{
+    string? username = "";
+    int customerId = -1;
+    Customer? customer = null;
+
+    io.DisplayMenuName("Create a New Account");
+    io.DisplayNote("If the customer does not yet exist in the database,\n" +
+                   "you will be given an opportunity to create that Customer.");
+
+    username = io.GetLineFromUser("Enter the username for the customer");
+
+    // Check if the username was entered
+    if (string.IsNullOrEmpty(username))
     {
-        string? username = "";
-        int customerId = -1;
-        Customer? customer = null;
-
-        // This method, along with CreateCustomer(), will create a new customer and account in the
-        // DB. However, if the Customer already exists, CreateCustomer() will not run
-
-        // The admin will start by entering the username. If that user does NOT exist in the DB,
-        // The admin will then create a customer for the DB.
-        // Cannot have an account unless there is a customer
-        io.DisplayMenuName("Create a New Account");
-        io.DisplayNote("If the customer does not yet exist in the database,\n" +
-                       "you will be given an opportunity to create that Customer.");
-
-        username = io.GetLineFromUser("Enter the username for the customer");
-        try 
-        {
-            Console.WriteLine("IN THE TRY BLOCK");
-            customer = customerDao.GetCustomerByUsername(username);
-        }
-        catch (NullReferenceException ex)
-        {
-            Console.WriteLine("Caught NullReferenceException");
-            io.PauseOutput();
-            io.DisplayDoesNotExist(username);
-            if(io.Confirm($"Add {username} to the database?"))
-            {
-                CreateCustomer(username);
-            }
-        }
-
-        // The customer should now exist in the Database
-        // Console.WriteLine("CHECKING CUSTOMER RETRIEVED");
-        // Console.WriteLine("id = " + customer.CustomerId);
-        // Console.WriteLine("customername = " + customer.CustomerId);
-
+        Console.WriteLine("Username cannot be empty.");
+        return;
     }
+
+    customer = customerDao.GetCustomerByUsername(username);
+
+    if (customer == null)
+    {
+        io.DisplayDoesNotExist(username);
+        if (io.Confirm($"Add {username} to the database?"))
+        {
+            customerId = CreateCustomer(username);
+            customer = customerDao.GetCustomerById(customerId); // Re-fetch the newly created customer by ID
+        }
+        else
+        {
+            Console.WriteLine("Customer creation cancelled.");
+            return;
+        }
+    }
+
+    if (customer != null)
+    {
+        Console.WriteLine("CHECKING CUSTOMER RETRIEVED");
+        Console.WriteLine("id = " + customer.CustomerId);
+        Console.WriteLine("customername = " + customer.CustomerUsername);
+    }
+    else
+    {
+        Console.WriteLine("Failed to retrieve or create customer.");
+    }
+}
 
     public int CreateCustomer(string username)
     {

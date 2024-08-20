@@ -217,17 +217,18 @@ ______             _             __    ___           _        _       _
     public string GetLineFromUser(string message)
     {
         NewLine();
+        string? line = "";
         try
         {
             Console.Write($"{message}: ");
-            string? line = Console.ReadLine();
+            line = Console.ReadLine();
         }
         catch (Exception ex)
         {
             PrintInputException(ex);
         }
 
-        return message;
+        return line;
 
     }
 
