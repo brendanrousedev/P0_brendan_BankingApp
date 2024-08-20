@@ -16,5 +16,6 @@ public interface BasicConsole {
     public string[] GetCredentials(string message);
     public bool ConfirmExit(string message);
     public void PrintLoginSuccess();
+    public void DisplayReturnToMainMenu();
     
 }

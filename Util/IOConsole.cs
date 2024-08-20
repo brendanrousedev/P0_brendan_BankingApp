@@ -207,4 +207,10 @@ ______             _             __    ___           _        _       _
         Clear();
         DisplayMenuName("Successfully Logged in!");
     }
+
+    public void DisplayReturnToMainMenu()
+    {
+        Clear();
+        DisplayMenuName("Logging out and returning to the main menu...");
+    }
 }

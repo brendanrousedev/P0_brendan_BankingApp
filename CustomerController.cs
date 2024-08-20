@@ -59,6 +59,8 @@ public class CustomerController
                     break;
             }
         }
+
+        io.DisplayReturnToMainMenu();
     }
 
 }
