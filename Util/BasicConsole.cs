@@ -12,6 +12,6 @@ public interface BasicConsole {
     public void NewLine();
     public void PrintInputException(Exception ex, int[] validOptions);
     public void PrintInputException(Exception ex);
-    public string[] GetPasswordAndUsername();
+    public string[] GetPasswordAndUsername(string message);
     
 }
