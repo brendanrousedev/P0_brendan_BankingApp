@@ -10,7 +10,7 @@ public class IOConsole : BasicConsole
 
     public void DisplayGoodbye()
     {
-        this.NewLine();
+        Clear();
         Console.WriteLine(@"
         
  _____                 _ _                
@@ -25,7 +25,7 @@ public class IOConsole : BasicConsole
         ");
         Console.WriteLine("\n\nThank you for using the Bank of Arstotzka application");
         Console.WriteLine("The application is now closing.");
-        Console.WriteLine();
+        NewLine();
     }
 
     public void DisplayGreeting()
@@ -191,6 +191,18 @@ ______             _             __    ___           _        _       _
     }
 
     public bool ConfirmExit()
+    {
+        NewLine();
+        Console.Write("Are you sure you want to exit? (Enter 'y' for Yes): ");
+        string? option = Console.ReadLine()?.Trim().ToLower();
+        if (string.IsNullOrEmpty(option))
+        {
+            option = "n";
+        }
+        return option == "y";
+    }
+
+    public bool ConfirmReturnToMainMenu()
     {
         throw new NotImplementedException();
     }

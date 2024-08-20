@@ -42,8 +42,17 @@ public class Program
             LoginController lc = new LoginController();
             lc.Run();
 
-            
+            // Once the Run method ends for lc, then the user must have selected the option to exit the program
+            if (io.ConfirmExit())
+            {
+                isRunning = false;
+            }
         }
+
+        io.DisplayGoodbye();
+
+        // Are there any connections that need to be closed when the program ends? 
+        Environment.Exit(0); // Is this line even necessary? 
 
 
     }
