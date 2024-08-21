@@ -193,7 +193,8 @@ ______             _             __    ___           _        _       _
     public bool Confirm(string message)
     {
         NewLine();
-        Console.Write($"{message} (Enter 'y' for Yes, any other key for No): ");
+        Console.Write(message); 
+        Console.Write("Enter 'y' for Yes, any other key for No): ");
         string? option = Console.ReadLine()?.Trim().ToLower();
         if (string.IsNullOrEmpty(option))
         {

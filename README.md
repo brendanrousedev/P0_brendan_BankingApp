@@ -16,6 +16,9 @@ PK_transactionId, FK_accountId, type (withdraw, deposit, transfer), money, date
 
 Fix all the possible null references
 
+Nice to haves: 
+Ask user to reset their password when a dummy one is used (ie whatever password the admin set it to)
+
 
 Presentation
 
