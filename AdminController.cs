@@ -45,7 +45,7 @@ public class AdminController
                     CreateAccount();
                     break;
                 case DELETE_ACCOUNT_OPTION:
-                    Console.WriteLine("DELETE ACCOUNT");
+                    DeleteCustomer();
                     break;
                 case UPDATE_ACCOUNT_OPTION:
                     Console.WriteLine("UPDATE ACCOUNT");
@@ -134,6 +134,13 @@ public class AdminController
         return customerDao.CreateNewCustomer(newCustomer);
     }
 
-    
+    public void DeleteCustomer()
+    {
+        Console.WriteLine("ENTER NAME TO DELETE");
+        string username = Console.ReadLine();
+        customerDao.DeleteCustomerByUsername(username);
+        Console.WriteLine("CUSTOMER DELETED");
+        io.PauseOutput();
+    }
 
 }

@@ -38,6 +38,10 @@ public class CustomerDao
             Context.Customers.Remove(customer);
             Context.SaveChanges();
         }
+        else
+        {
+            Console.WriteLine("Errooooooooooooooooooooooooooooooooooooor");
+        }
 
     }
 
