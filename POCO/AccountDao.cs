@@ -1,3 +1,4 @@
+using Microsoft.EntityFrameworkCore;
 using P0_brendan_BankingApp.POCO;
 
 public class AccountDao 
@@ -11,13 +12,11 @@ public class AccountDao
         io = new IOConsole();
     }
 
-    public int CreateNewAccount(Account account, Customer customer)
+    public int CreateNewAccount(Account account)
     {
-        account.CustomerId = customer.CustomerId;
+        Context.Entry(account.Customer).State = EntityState.Unchanged;
         Context.Accounts.Add(account);
         Context.SaveChanges();
-        io.PrintMessage($"Created {account.AccType} account for {customer.CustomerUsername}");
-        io.PauseOutput();
 
         return account.AccId;
     }

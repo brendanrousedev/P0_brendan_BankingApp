@@ -111,45 +111,8 @@ public class AdminController
 
     if (customer != null)
     {
-        Account account = new Account();
-        account.CustomerId = customer.CustomerId;
-        const string CHECKING = "Checking", SAVINGS = "Savings", LOAN = "Loan", EXIT = "Cancel";
-        const int CHECKING_OPTION = 1, SAVINGS_OPTION = 2, LOAN_OPTION = 3, EXIT_OPTION = 0;
-        string[] options = { CHECKING, SAVINGS, LOAN, EXIT };
-
-        string? accountType = "";
-        int selection = io.GetMenuSelection("What is the account type for " + customer.CustomerUsername + "?", options);
-        switch (selection)
-        {
-            case CHECKING_OPTION:
-                accountType = CHECKING;
-                break;
-            case SAVINGS_OPTION:
-                accountType = SAVINGS;
-                break;
-            case LOAN_OPTION:
-                accountType = LOAN;
-                break;
-            case EXIT_OPTION:
-                if (io.Confirm("Cancel account creaton?"))
-                {
-                    io.PrintMessage("Account creation was cancelled...");
-                    io.PauseOutput();
-                    return;
-                }
-                break;
-
-        }
-
-        account.AccType = accountType;
-        account.Balance = 0m;
-        account.IsActive = true;
-
-        accountDao.CreateNewAccount(account, customer);
-
-        Console.WriteLine($"Successfully created a {account.AccType} account for {customer.CustomerUsername}");
-        Console.WriteLine("******* Account Details *******");
-        Console.WriteLine("Account Username: " + customer.CustomerUsername);
+        AccountController ac = new AccountController(customer);
+        ac.Run();
         
     }
     else
