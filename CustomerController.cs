@@ -1,3 +1,5 @@
+using P0_brendan_BankingApp.POCO;
+
 public class CustomerController
 {
     const string MENU_NAME = "Customer Menu";
@@ -19,6 +21,12 @@ public class CustomerController
                 EXIT = "Exit to Main Menu";
 
     const string CONFIRM_EXIT = "Return to the main menu?";
+    Customer? customer;
+
+    public CustomerController(Customer customer)
+    {
+
+    }
 
     public void Run()
     {
@@ -31,25 +39,25 @@ public class CustomerController
             switch (selection)
             {
                 case ACCOUNT_DETAILS_OPTION:
-                    Console.WriteLine("WITHDRAW");
+                    GetAccountDetails();
                     break;
                 case WITHDRAW_OPTION:
-                    Console.WriteLine("DEPOSIT");
+                    WithdrawFunds();
                     break;
                 case DEPOSIT_OPTION:
-                    Console.WriteLine("UPDATE ACCOUNT");
+                    DepositFunds();
                     break;
                 case TRANSFER_OPTION:
-                    Console.WriteLine("DISPLAY SUMMARY");
+                    TransferFunds();
                     break;
                 case GET_TRANSACTIONS_OPTION:
-                    Console.WriteLine("RESET PASSWORD");
+                    GetTransactions();
                     break;
                 case REQUEST_CHECKBOOK_OPTION:
-                    Console.WriteLine("APPROVE CHECKBOOK");
+                    RequestCheckbook();
                     break;
                 case UPDATE_PASSWORD:
-                    Console.WriteLine("UPDATE PASSWORD");
+                    ResetPassword();
                     break;
                 case EXIT_OPTION:
                     if (io.Confirm(CONFIRM_EXIT))
@@ -63,4 +71,38 @@ public class CustomerController
         io.DisplayReturnToMainMenu();
     }
 
+    private void ResetPassword()
+    {
+        throw new NotImplementedException();
+    }
+
+    private void RequestCheckbook()
+    {
+        throw new NotImplementedException();
+    }
+
+    private void GetTransactions()
+    {
+        throw new NotImplementedException();
+    }
+
+    private void TransferFunds()
+    {
+        throw new NotImplementedException();
+    }
+
+    private void DepositFunds()
+    {
+        throw new NotImplementedException();
+    }
+
+    private void WithdrawFunds()
+    {
+        throw new NotImplementedException();
+    }
+
+    private void GetAccountDetails()
+    {
+        throw new NotImplementedException();
+    }
 }

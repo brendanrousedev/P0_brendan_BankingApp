@@ -50,16 +50,16 @@ public class AdminController
                     DeleteAccount();
                     break;
                 case UPDATE_ACCOUNT_OPTION:
-                    Console.WriteLine("UPDATE ACCOUNT");
+                    UpdateAccountDetails();
                     break;
                 case DISPLAY_SUMMARY_OPTION:
-                    Console.WriteLine("DISPLAY SUMMARY");
+                    DisplaySummary();
                     break;
                 case RESET_PASSWORD_OPTION:
-                    Console.WriteLine("RESET PASSWORD");
+                    ResetPassword();
                     break;
                 case APPROVE_CHECKBOOK_OPTION:
-                    Console.WriteLine("APPROVE CHECKBOOK");
+                    ApproveCheckbook();
                     break;
                 case EXIT_OPTION:
                     if (io.Confirm(CONFIRM_EXIT))
@@ -71,6 +71,26 @@ public class AdminController
         }
 
         io.DisplayReturnToMainMenu();
+    }
+
+    private void ApproveCheckbook()
+    {
+        throw new NotImplementedException();
+    }
+
+    private void ResetPassword()
+    {
+        throw new NotImplementedException();
+    }
+
+    private void DisplaySummary()
+    {
+        throw new NotImplementedException();
+    }
+
+    private void UpdateAccountDetails()
+    {
+        throw new NotImplementedException();
     }
 
     public void CreateAccount()

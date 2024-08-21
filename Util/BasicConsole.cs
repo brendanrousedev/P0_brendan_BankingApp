@@ -21,5 +21,6 @@ public interface BasicConsole {
     public void DisplayDoesNotExist(string username);
     public void DisplayNote(string note);
     public void PrintMessage(string message);
+    public decimal GetAmount(string message);
     
 }

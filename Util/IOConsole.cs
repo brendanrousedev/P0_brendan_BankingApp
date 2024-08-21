@@ -250,4 +250,9 @@ ______             _             __    ___           _        _       _
     {
         Console.WriteLine(message);
     }
+
+    public decimal GetAmount(string message)
+    {
+        throw new NotImplementedException();
+    }
 }
