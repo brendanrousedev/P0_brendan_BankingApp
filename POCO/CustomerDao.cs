@@ -1,3 +1,4 @@
+using System.Data.SqlTypes;
 using Microsoft.EntityFrameworkCore;
 using P0_brendan_BankingApp.POCO;
 
@@ -21,8 +22,16 @@ public class CustomerDao
 
     public int CreateNewCustomer(Customer customer)
     {
+        if (CustomerExists(customer.CustomerUsername))
+        {
+            io.PrintMessage("${customer.CustomerUsername} already exists.");
+            io.PauseOutput();
+            return GetCustomerByUsername(customer.CustomerUsername).CustomerId;
+        }
         Context.Customers.Add(customer);
         Context.SaveChanges();
+        io.PrintMessage($"{customer.CustomerUsername} was added to the data base");
+        io.PauseOutput();
         return customer.CustomerId;
     }
 
@@ -38,10 +47,12 @@ public class CustomerDao
         {
             Context.Customers.Remove(customer);
             Context.SaveChanges();
+            io.PrintMessage("\n" + username + " was successfully deleted.");
         }
         else
         {
             io.DisplayDoesNotExist(username);
+            io.PauseOutput();
         }
 
     }

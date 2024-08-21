@@ -131,6 +131,7 @@ public class AdminController
         newCustomer.PasswordHash = PasswordUtils.HashPassword(password, salt);
         newCustomer.Salt = salt;
 
+
         return customerDao.CreateNewCustomer(newCustomer);
     }
 
@@ -141,7 +142,6 @@ public class AdminController
                        "also remove all their accounts and the transactions from those accounts.");
         string username = io.GetLineFromUser("Username of customer to be deleted");
         customerDao.DeleteCustomerByUsername(username);
-        io.PrintMessage("\n" + username + " was successfully deleted.");
         io.PauseOutput();
     }
 
