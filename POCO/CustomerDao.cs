@@ -5,10 +5,11 @@ using P0_brendan_BankingApp.POCO;
 public class CustomerDao 
 {
     P0BrendanBankingDbContext Context;
-    BasicConsole io = new IOConsole();
+    BasicConsole io;
     public CustomerDao(P0BrendanBankingDbContext context)
     {
         Context = context;
+        io = new IOConsole();
     }
     public Customer? GetCustomerByUsername(string customerUsername)
     {

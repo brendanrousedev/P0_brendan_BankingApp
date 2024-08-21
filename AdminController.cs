@@ -1,3 +1,4 @@
+using System.Security.AccessControl;
 using P0_brendan_BankingApp.POCO;
 
 /******************************************************************************
@@ -30,6 +31,7 @@ public class AdminController
     const string CONFIRM_EXIT = "Return to the main menu?";
     // INSERT DAO objects here
     private CustomerDao? customerDao =  new CustomerDao(new P0BrendanBankingDbContext());
+    private AccountDao? accountDao = new AccountDao(new P0BrendanBankingDbContext());
 
     public void Run()
     {
@@ -109,9 +111,46 @@ public class AdminController
 
     if (customer != null)
     {
-        Console.WriteLine("CHECKING CUSTOMER RETRIEVED");
-        Console.WriteLine("id = " + customer.CustomerId);
-        Console.WriteLine("customername = " + customer.CustomerUsername);
+        Account account = new Account();
+        account.CustomerId = customer.CustomerId;
+        const string CHECKING = "Checking", SAVINGS = "Savings", LOAN = "Loan", EXIT = "Cancel";
+        const int CHECKING_OPTION = 1, SAVINGS_OPTION = 2, LOAN_OPTION = 3, EXIT_OPTION = 0;
+        string[] options = { CHECKING, SAVINGS, LOAN, EXIT };
+
+        string? accountType = "";
+        int selection = io.GetMenuSelection("What is the account type for " + customer.CustomerUsername + "?", options);
+        switch (selection)
+        {
+            case CHECKING_OPTION:
+                accountType = CHECKING;
+                break;
+            case SAVINGS_OPTION:
+                accountType = SAVINGS;
+                break;
+            case LOAN_OPTION:
+                accountType = LOAN;
+                break;
+            case EXIT_OPTION:
+                if (io.Confirm("Cancel account creaton?"))
+                {
+                    io.PrintMessage("Account creation was cancelled...");
+                    io.PauseOutput();
+                    return;
+                }
+                break;
+
+        }
+
+        account.AccType = accountType;
+        account.Balance = 0m;
+        account.IsActive = true;
+
+        accountDao.CreateNewAccount(account, customer);
+
+        Console.WriteLine($"Successfully created a {account.AccType} account for {customer.CustomerUsername}");
+        Console.WriteLine("******* Account Details *******");
+        Console.WriteLine("Account Username: " + customer.CustomerUsername);
+        
     }
     else
     {
@@ -144,5 +183,7 @@ public class AdminController
         customerDao.DeleteCustomerByUsername(username);
         io.PauseOutput();
     }
+
+    
 
 }
