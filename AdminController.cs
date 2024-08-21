@@ -132,8 +132,8 @@ public class AdminController
         newCustomer.Salt = salt;
 
         return customerDao.CreateNewCustomer(newCustomer);
-
-
     }
+
+    
 
 }

@@ -18,7 +18,7 @@ Fix all the possible null references
 
 Nice to haves: 
 Ask user to reset their password when a dummy one is used (ie whatever password the admin set it to)
-Create Account - create a new account for a customer using a customerID or username 
+Create Account - create a new account for a customer using a customerID or username - possibly use
 
 
 Presentation

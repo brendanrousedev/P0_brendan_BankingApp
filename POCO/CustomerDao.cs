@@ -30,5 +30,15 @@ public class CustomerDao
         return Context.Customers.Any(c => c.CustomerUsername == username);
     }
 
+    public void DeleteCustomerByUsername(string username)
+    {
+        var customer = GetCustomerByUsername(username);
+        if (customer != null)
+        {
+            Context.Customers.Remove(customer);
+            Context.SaveChanges();
+        }
+
+    }
 
 }
