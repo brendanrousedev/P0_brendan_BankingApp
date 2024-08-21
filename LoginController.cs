@@ -1,6 +1,7 @@
 using System.Reflection;
 using System.Security;
 using Microsoft.EntityFrameworkCore.Metadata.Conventions;
+using P0_brendan_BankingApp.POCO;
 
 public class LoginController
 {
@@ -44,7 +45,9 @@ public class LoginController
                 case CUSTOMER_OPTION:
                     if (VerifyCustomer())
                     {
-                        CustomerController cc = new CustomerController();
+                        P0BrendanBankingDbContext context = new P0BrendanBankingDbContext();
+                        Customer customer = context.Customers.Find(1);
+                        CustomerController cc = new CustomerController(customer);
                         io.PrintLoginSuccess();
                         io.PauseOutput();
                         cc.Run();

@@ -1,3 +1,5 @@
+using P0_brendan_BankingApp.POCO;
+
 public class IOConsole : BasicConsole
 {
 
@@ -268,5 +270,21 @@ ______             _             __    ___           _        _       _
 
 
         return amount;
+    }
+
+    public void DisplayAccountDetails(Account account)
+    {
+        NewLine();
+        Console.WriteLine($"Account Id: {account.AccId}");
+        Console.WriteLine($"Account Type: {account.AccType}");
+        Console.WriteLine($"Account Balance: ${account.Balance}");
+        Console.WriteLine($"Account is active: {account.IsActive}");
+        Console.WriteLine($"Number of Requests: {account.Requests}");
+        NewLine();
+    }
+
+    public void DisplaySummary()
+    {
+        throw new NotImplementedException();
     }
 }

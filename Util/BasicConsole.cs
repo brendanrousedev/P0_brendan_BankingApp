@@ -1,3 +1,5 @@
+using P0_brendan_BankingApp.POCO;
+
 public interface BasicConsole {
 
     public void PauseOutput();
@@ -22,5 +24,9 @@ public interface BasicConsole {
     public void DisplayNote(string note);
     public void PrintMessage(string message);
     public decimal GetAmount(string message);
+    public void DisplayAccountDetails(Account account);
+    public void DisplaySummary();
+    
+
     
 }

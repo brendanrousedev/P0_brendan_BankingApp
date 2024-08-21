@@ -25,7 +25,7 @@ public class CustomerController
 
     public CustomerController(Customer customer)
     {
-
+        this.customer = customer;
     }
 
     public void Run()
@@ -45,7 +45,7 @@ public class CustomerController
                     WithdrawFunds();
                     break;
                 case DEPOSIT_OPTION:
-                    DepositFunds();
+                    SelectAccount();
                     break;
                 case TRANSFER_OPTION:
                     TransferFunds();
@@ -91,9 +91,42 @@ public class CustomerController
         throw new NotImplementedException();
     }
 
-    private void DepositFunds()
+    private void DepositFunds(Account account)
     {
-        throw new NotImplementedException();
+        P0BrendanBankingDbContext context = new P0BrendanBankingDbContext();
+        decimal amount = io.GetAmount("Deposit Funds");
+        TransactionLog tl = new TransactionLog();
+        tl.AccId = account.AccId;
+        tl.Account = account;
+        tl.Amount = amount;
+        tl.TransactionType = "Deposit";
+        tl.TransactionDate = DateTime.Now;
+        context.SaveChanges();
+        
+        account.Balance += amount;
+        context.Accounts.Update(account);
+        context.SaveChanges();
+        
+        context.TransactionLogs.Add(tl);
+        context.SaveChanges();
+        Console.WriteLine("The transaction was successfully added");
+        io.PauseOutput();
+        
+    }
+
+    private void SelectAccount()
+    {
+        Console.WriteLine("All accounts:");
+        foreach(var account in customer.Accounts)
+        {
+            io.DisplayAccountDetails(account);
+        }
+        Console.WriteLine("Select an account: ");
+        int id = Convert.ToInt32(Console.ReadLine());
+        AccountDao accountDao = new AccountDao(new P0BrendanBankingDbContext());
+        Account theAccount = accountDao.GetAccountById(id);
+        DepositFunds(theAccount);
+
     }
 
     private void WithdrawFunds()
