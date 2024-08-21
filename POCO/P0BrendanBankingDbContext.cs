@@ -103,7 +103,7 @@ public partial class P0BrendanBankingDbContext : DbContext
 
         modelBuilder.Entity<TransactionLog>(entity =>
         {
-            entity.HasKey(e => e.TransactionLogId).HasName("PK__TransactionLog__123456789");
+            entity.HasKey(e => e.TransactionId).HasName("PK__TransactionLog__123456789");
 
             entity.ToTable("TransactionLog");
 
@@ -114,7 +114,7 @@ public partial class P0BrendanBankingDbContext : DbContext
         .IsUnicode(false);
 
             entity.HasOne(d => d.Account).WithMany(p => p.TransactionLogs)
-                .HasForeignKey(d => d.AccountId)
+                .HasForeignKey(d => d.AccId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_AccountTransactionLog");
         });

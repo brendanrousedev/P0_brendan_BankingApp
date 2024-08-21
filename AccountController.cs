@@ -27,7 +27,7 @@ public class AccountController
 
     }
 
-    public void Run()
+    public void RunCreate()
     {
         string[] options = { CHECKING, SAVINGS, LOAN, EXIT };
 
@@ -90,5 +90,22 @@ public class AccountController
 
     }
 
+    public void RunDelete()
+    {
+        io.DisplayMenuName($"Delete account for {Customer.CustomerUsername}");
+        foreach (var account in Customer.Accounts)
+        {
+            Console.WriteLine($"Account Id: {account.AccId} - Account type: {account.AccType}");
+        }
+
+        // TODO: Encapsulate this in IOConsole
+        Console.Write("Enter the account id to delete: ");
+        int id = Convert.ToInt32(Console.ReadLine());
+        accountDao.DeleteAccountById(id);
+        Console.WriteLine($"Account {id} and all related transactions and requests were deleted...");
+        io.PauseOutput();
+
+
+    }
 }
 
