@@ -4,6 +4,7 @@ using P0_brendan_BankingApp.POCO;
 public class CustomerDao 
 {
     P0BrendanBankingDbContext Context;
+    BasicConsole io = new IOConsole();
     public CustomerDao(P0BrendanBankingDbContext context)
     {
         Context = context;
@@ -40,7 +41,7 @@ public class CustomerDao
         }
         else
         {
-            Console.WriteLine("Errooooooooooooooooooooooooooooooooooooor");
+            io.DisplayDoesNotExist(username);
         }
 
     }

@@ -245,4 +245,9 @@ ______             _             __    ___           _        _       _
         Console.Write($"Note: {note}");
         NewLine();
     }
+
+    public void PrintMessage(string message)
+    {
+        Console.WriteLine(message);
+    }
 }

@@ -136,10 +136,12 @@ public class AdminController
 
     public void DeleteCustomer()
     {
-        Console.WriteLine("ENTER NAME TO DELETE");
-        string username = Console.ReadLine();
+        io.DisplayMenuName("Delete Customer by Username");
+        io.DisplayNote("Note: Due to foreign key constraints, deleting a customer will" +
+                       "also remove all their accounts and the transactions from those accounts.");
+        string username = io.GetLineFromUser("Username of customer to be deleted");
         customerDao.DeleteCustomerByUsername(username);
-        Console.WriteLine("CUSTOMER DELETED");
+        io.PrintMessage("\n" + username + " was successfully deleted.");
         io.PauseOutput();
     }
 

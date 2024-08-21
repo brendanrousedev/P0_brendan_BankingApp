@@ -20,5 +20,6 @@ public interface BasicConsole {
     public string GetLineFromUser(string message);
     public void DisplayDoesNotExist(string username);
     public void DisplayNote(string note);
+    public void PrintMessage(string message);
     
 }
