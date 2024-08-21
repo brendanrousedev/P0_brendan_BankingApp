@@ -193,7 +193,7 @@ ______             _             __    ___           _        _       _
     public bool Confirm(string message)
     {
         NewLine();
-        Console.WriteLine(message); 
+        Console.WriteLine(message);
         Console.Write("Enter 'y' for Yes, any other key for No): ");
         string? option = Console.ReadLine()?.Trim().ToLower();
         if (string.IsNullOrEmpty(option))
@@ -253,6 +253,20 @@ ______             _             __    ___           _        _       _
 
     public decimal GetAmount(string message)
     {
-        throw new NotImplementedException();
+        DisplayMenuName(message);
+        NewLine();
+        Console.Write("Enter amount $");
+        decimal amount = 0m;
+        try
+        {
+            amount = Convert.ToDecimal(Console.ReadLine());
+        }
+        catch (FormatException ex)
+        {
+            PrintInputException(ex);
+        }
+
+
+        return amount;
     }
 }
