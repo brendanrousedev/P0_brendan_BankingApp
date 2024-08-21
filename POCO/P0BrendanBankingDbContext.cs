@@ -22,6 +22,8 @@ public partial class P0BrendanBankingDbContext : DbContext
     public virtual DbSet<Customer> Customers { get; set; }
 
     public virtual DbSet<Request> Requests { get; set; }
+    public virtual DbSet<TransactionLog> TransactionLogs { get; set; }
+
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see https://go.microsoft.com/fwlink/?LinkId=723263.
@@ -98,6 +100,25 @@ public partial class P0BrendanBankingDbContext : DbContext
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_CustomerRequest");
         });
+
+        modelBuilder.Entity<TransactionLog>(entity =>
+        {
+            entity.HasKey(e => e.TransactionLogId).HasName("PK__TransactionLog__123456789");
+
+            entity.ToTable("TransactionLog");
+
+            entity.Property(e => e.TransactionDate).HasColumnType("datetime");
+            entity.Property(e => e.Amount).HasColumnType("decimal(18, 2)");
+            entity.Property(e => e.TransactionType)
+            .HasMaxLength(50)
+        .IsUnicode(false);
+
+            entity.HasOne(d => d.Account).WithMany(p => p.TransactionLogs)
+                .HasForeignKey(d => d.AccountId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_AccountTransactionLog");
+        });
+
 
         OnModelCreatingPartial(modelBuilder);
     }
