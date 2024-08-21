@@ -93,9 +93,12 @@ public class AccountController
     public void RunDelete()
     {
         io.DisplayMenuName($"Delete account for {Customer.CustomerUsername}");
+        Console.WriteLine("Number of accounts: " + Customer.Accounts.Count);
+        io.PauseOutput();
         foreach (var account in Customer.Accounts)
         {
             Console.WriteLine($"Account Id: {account.AccId} - Account type: {account.AccType}");
+            io.PauseOutput();
         }
 
         // TODO: Encapsulate this in IOConsole
