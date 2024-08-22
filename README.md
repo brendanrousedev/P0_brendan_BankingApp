@@ -10,6 +10,7 @@ Add Transaction table to DB - How will I alter the db context.cs?
 Add the ability for an admin to create other admins.
 Add comments to code
 make presentation
+Add loop when taking a numeric or string value from user
 
 Transaction Columns:
 PK_transactionId, FK_accountId, type (withdraw, deposit, transfer), money, date

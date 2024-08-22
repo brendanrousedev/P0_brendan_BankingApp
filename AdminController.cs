@@ -80,12 +80,39 @@ public class AdminController
 
     private void ApproveCheckbook()
     {
-        throw new NotImplementedException();
+        
     }
 
     private void ResetPassword()
     {
-        throw new NotImplementedException();
+        // FIXME: Improve Display
+        io.DisplayMenuName("Reset Customer Password"); 
+        string username =  io.GetLine("Enter customer username");
+
+        Console.WriteLine("Resetting customer password...");
+        byte[] salt = PasswordUtils.GenerateSalt();
+        string passwordhash = PasswordUtils.HashPassword("password1", salt);
+        using (var context = new P0BrendanBankingDbContext())
+        {
+            var customer = context.Customers.Where(c => c.CustomerUsername == username).FirstOrDefault();
+
+            if (customer != null)
+            {
+                customer.PasswordHash = passwordhash;
+                customer.Salt = salt;
+                context.SaveChanges();
+                Console.WriteLine("Password is now set to default");
+                io.PauseOutput();
+            }
+            else
+            {
+                Console.WriteLine("Customer not found....");
+                io.PauseOutput();
+            }
+        }
+
+        
+        
     }
 
     private void DisplaySummary()
