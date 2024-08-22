@@ -296,7 +296,7 @@ ______             _             __    ___           _        _       _
         Console.WriteLine($"Account Type: {account.AccType}");
         Console.WriteLine($"Account Balance: ${account.Balance}");
         Console.WriteLine($"Account is Active: {account.IsActive}");
-        Console.WriteLine($"Number of Open Requests: {account.Requests}");
+        Console.WriteLine($"Number of Open Requests: {account.Requests.Count()}");
         NewLine();
     }
 
@@ -400,5 +400,12 @@ ______             _             __    ___           _        _       _
         Console.WriteLine($"{INDENT}Type: {tl.TransactionType}");
         Console.WriteLine($"{INDENT}Transaction Amount: ${tl.Amount}");
         NewLine();
+    }
+
+    public void DisplayDeleteWarning()
+    {
+        DisplayMenuName("WARNING");
+        Console.WriteLine("Deleting this account will also remove"
+                    + "\nall linked transactions and requests");
     }
 }

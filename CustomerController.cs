@@ -277,7 +277,6 @@ public class CustomerController
 
                 Context.SaveChanges();
                 io.DisplayMessageWithPauseOutput($"New Account Balance: ${account.Balance}");
-                io.PauseOutput();
             }
         }
 
@@ -295,32 +294,37 @@ public class CustomerController
         {
             if (account.AccType == "Loan")
             {
-                Console.WriteLine($"Cannot withdraw from this account because it is a Loan");
+                io.DisplayMessageWithPauseOutput($"Cannot withdraw from this account because it is a Loan");
+                return;
+            }
+            else if (!customer.Accounts.Contains(account))
+            {
+                io.DisplayMessageWithPauseOutput($"Cannot withdraw because this account either " +
+                                        "\ndoesn't exist or it is another customer's account.");
+                return;
+            }
+            // This method as of now allows account overdraft
+            Console.WriteLine($"Current balance: ${account.Balance}");
+            Console.WriteLine($"Withdraw funds from Account No. {account.AccId}");
+            decimal amount = io.GetDecimalFromUser();
+            if (amount <= 0m)
+            {
+                io.DisplayMessageWithPauseOutput("Cancelling withdraw....");
             }
             else
             {
-                // This method as of now allows account overdraft
-                Console.WriteLine($"Current balance: ${account.Balance}");
-                Console.Write("$Withdraw funds from Account No. {account.AccId}");
-                decimal amount = io.GetDecimalFromUser();
-                if (amount <= 0m)
+                account.Balance -= amount;
+                TransactionLog tl = new TransactionLog()
                 {
-                    io.DisplayMessageWithPauseOutput("Cancelling withdraw....");
-                }
-                else
-                {
-                    account.Balance -= amount;
-                    TransactionLog tl = new TransactionLog()
-                    {
-                        AccId = account.AccId,
-                        TransactionType = "Withdraw",
-                        TransactionDate = DateTime.Now,
-                        Amount = -amount
-                    };
-                    Context.TransactionLogs.Add(tl);
-                }
-                Context.SaveChanges();
+                    AccId = account.AccId,
+                    TransactionType = "Withdraw",
+                    TransactionDate = DateTime.Now,
+                    Amount = -amount
+                };
+                Context.TransactionLogs.Add(tl);
             }
+            Context.SaveChanges();
+
         }
 
         io.Clear();

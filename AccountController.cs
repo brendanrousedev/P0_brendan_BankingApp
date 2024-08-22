@@ -11,6 +11,7 @@ public class AccountController
     Admin admin;
     BasicConsole io;
     Customer customer;
+    Account currentAccount;
 
     public AccountController(P0BrendanBankingDbContext Context, Admin admin, Customer customer)
     {
@@ -141,144 +142,107 @@ public class AccountController
         if (!AccountDao.CheckIfAccountExists(Context, id))
         {
             io.DisplayDoesNotExist($"Account #{id}");
-            if (!io.Confirm("Enter another Id?"))
-            {
-                io.DisplayMenuSwitch("Returning to the Admin menu...");
-                return;
-
-            }
-            else
+            if (io.Confirm("Enter another Id?"))
             {
                 FindAccountById(purpose);
             }
         }
 
-        switch (purpose)
+        currentAccount = Context.Accounts.Find(id);
+        if (currentAccount == null)
         {
-            case UPDATE:
-                UpdateAccountDetails(id);
-                break;
-            case DELETE:
-                DeleteByAccountId(id);
-                break;
+            io.DisplayMenuSwitch($"Cancelling Account {purpose} and returning to Menu...");
+        }
+        else
+        {
+            switch (purpose)
+            {
+                case UPDATE:
+                    UpdateAccountDetails();
+                    break;
+                case DELETE:
+                    DeleteByAccountId();
+                    break;
+            }
         }
     }
 
-    private void DeleteByAccountId(int id)
+    private void DeleteByAccountId()
     {
-        Account account = Context.Accounts.Find(id);
-        Context.Accounts.Remove(account);
-        Context.SaveChanges();
-        io.DisplayMenuName("Account Was Deleted");
-        io.DisplayAccountDetails(account);
-        io.PauseOutput();
+        io.DisplayDeleteWarning();
+        if (io.Confirm($"Are you sure you want to delete Account No. {currentAccount.AccId}?"))
+        {
+            DeleteTransactionsLogs();
+            DeleteRequests();
+            Context.Accounts.Remove(currentAccount);
+            Context.SaveChanges();
+            io.DisplayMenuName("Account Was Deleted");
+            io.DisplayAccountDetails(currentAccount);
+            io.PauseOutput();
+        }
+        else
+        {
+            io.DisplayMenuSwitch("Cancelling Account Deletion and returning to the Admin menu...");
+        }
     }
 
-    private void UpdateAccountDetails(int id)
+    private void DeleteTransactionsLogs()
     {
-        Account account = Context.Accounts.Find(id);
-        Account updatedAccount = account;
-        if (account == null)
+        foreach (var transaction in currentAccount.TransactionLogs)
         {
-            io.DisplayDoesNotExist($"Account with ID {id}");
+            Context.Remove(transaction);
+        }
+        Context.SaveChanges();
+    }
+
+    private void DeleteRequests()
+    {
+        foreach (var request in currentAccount.Requests)
+        {
+            Context.Remove(request);
+        }
+        Context.SaveChanges();
+    }
+
+    private void UpdateAccountDetails()
+    {
+        if (currentAccount == null)
+        {
+            io.DisplayDoesNotExist($"Account with ID {currentAccount.AccId}");
             io.DisplayMenuSwitch("Returning to the admin menu...");
             return;
         }
 
 
         const string ACC_TYPE = "Account Type", BALANCE = "Balance", IS_ACTIVE = "Is Active", EXIT = "Finish Updating";
-        string MENU_NAME = $"Update Account No. {account.AccId} Details for User {account.Customer.CustomerUsername}";
+        string MENU_NAME = $"Update Account No. {currentAccount.AccId} Details for User {currentAccount.Customer.CustomerUsername}";
         string[] OPTIONS = { ACC_TYPE, BALANCE, IS_ACTIVE, EXIT };
         const int ACC_TYPE_O = 1, BALANCE_O = 2, IS_ACTIVE_O = 3, EXIT_O = 0;
 
         bool isRunning = true;
         while (isRunning)
         {
-            account = Context.Accounts.Find(id);
-            updatedAccount = account;
 
             io.DisplayMenuName("Update Account Details");
             int selection = io.GetMenuSelection(MENU_NAME, OPTIONS);
-            if (selection == ACC_TYPE_O)
+            switch (selection)
             {
-                const string CHECKING = "Checking", SAVINGS = "Savings", LOAN = "Loan", CANCEL = "Cancel";
-                string MENU_NAME_TYPE = $"Select account type for Account No.{account.AccId}";
-                string[] OPTIONS_TYPE = { CHECKING, SAVINGS, LOAN, CANCEL };
-                const int CHECKING_O = 1, SAVINGS_O = 2, LOAN_O = 3, CANCEL_O = 0;
-
-                bool isRunningType = true;
-
-                while (isRunningType)
-                {
-                    int typeSelection = io.GetMenuSelection(MENU_NAME_TYPE, OPTIONS_TYPE);
-                    switch (selection)
+                case ACC_TYPE_O:
+                    UpdateAccountType();
+                    break;
+                case BALANCE_O:
+                    UpdateAccountBalance();
+                    break;
+                case IS_ACTIVE_O:
+                    UpdateAccountIsActive();
+                    break;
+                case EXIT_O:
+                    if (io.Confirm($"Finish Updating Account No. {currentAccount.AccId}?"))
                     {
-                        case CHECKING_O:
-                            updatedAccount.AccType = CHECKING;
-                            break;
-                        case SAVINGS_O:
-                            updatedAccount.AccType = SAVINGS;
-                            break;
-                        case LOAN_O:
-                            updatedAccount.AccType = LOAN;
-                            break;
-                        case EXIT_O:
-                            if (!io.Confirm("Cancel updating the account type?"))
-                            {
-                                continue;
-                            }
-                            break;
+                        isRunning = false;
                     }
-
-                    isRunning = false;
-                }
+                    break;
             }
-            if (selection == BALANCE_O)
-            {
-                decimal amount = io.GetDecimalFromUser();
-                if (amount != 0)
-                {
-                    updatedAccount.Balance = amount;
-                }
-            }
-            if (selection == IS_ACTIVE_O)
-            {
-                Console.WriteLine("Enter 1 for Active, 0 for Not Active");
-                int option = io.GetSelectionAsInt();
-                switch (option)
-                {
-                    case 1:
-                        updatedAccount.IsActive = true;
-                        break;
-                    case 0:
-                        updatedAccount.IsActive = false;
-                        break;
-                    default:
-                        io.DisplayMessage("Invalid Entry");
-                        io.PauseOutput();
-                        break;
-                }
-
-            }
-            if (selection == EXIT_O)
-            {
-                if (io.Confirm($"Finish updating Account No.{account.AccId}?"))
-                {
-                    isRunning = false;
-                }
-            }
-
-            Context.Accounts.Attach(updatedAccount);
-            Context.Entry(updatedAccount).State = EntityState.Modified;
-            Context.SaveChanges();
-            io.DisplayMenuName($"Account Id {updatedAccount.AccId} Was Modifed");
-            io.NewLine();
-            io.DisplayMessage("Before");
-            io.DisplayAccountDetails(account);
-            io.NewLine();
-            io.DisplayMessage("After");
-            io.DisplayAccountDetails(updatedAccount);
-            io.PauseOutput();
 
 
         }
@@ -286,6 +250,105 @@ public class AccountController
         io.DisplayMenuSwitch("Returning to the Admin menu...");
 
     }
+
+    private void UpdateAccountType()
+    {
+        const string CHECKING = "Checking", SAVINGS = "Savings", LOAN = "Loan", CANCEL = "Cancel";
+        string MENU_NAME_TYPE = $"Select account type for Account No.{currentAccount.AccId}";
+        string[] OPTIONS_TYPE = { CHECKING, SAVINGS, LOAN, CANCEL };
+        const int CHECKING_O = 1, SAVINGS_O = 2, LOAN_O = 3, CANCEL_O = 0;
+
+        bool isRunning = true;
+        while (isRunning)
+        {
+            int selection = io.GetMenuSelection(MENU_NAME_TYPE, OPTIONS_TYPE);
+            switch (selection)
+            {
+                case CHECKING_O:
+                    currentAccount.AccType = CHECKING;
+                    isRunning = false;
+                    break;
+                case SAVINGS_O:
+                    currentAccount.AccType = SAVINGS;
+                    isRunning = false;
+                    break;
+                case LOAN_O:
+                    currentAccount.AccType = LOAN;
+                    isRunning = false;
+                    break;
+                case CANCEL_O:
+                    if (io.Confirm("Cancel updating the account type?"))
+                    {
+                        isRunning = false; ;
+                    }
+                    break;
+            }
+            Context.SaveChanges();
+        }
+    
+        io.DisplayMenuName($"Account No. is now a {currentAccount.AccType} Account");
+        io.PauseOutput();
+
+    }
+
+    private void UpdateAccountBalance()
+    {
+        decimal oldBalance = currentAccount.Balance;
+        io.DisplayMenuName($"Update Balance for Account No. {currentAccount.AccId}");
+        decimal amount = io.GetDecimalFromUser();
+        currentAccount.Balance = amount;
+        TransactionLog tl = new TransactionLog() {
+            AccId = currentAccount.AccId,
+            TransactionType = "Adjustment",
+            TransactionDate = DateTime.Now,
+            Amount = amount
+            
+        };
+        Context.TransactionLogs.Add(tl);
+        Context.SaveChanges();
+        io.NewLine();
+        io.DisplayMessage("Previous Balance: $" + oldBalance);
+        io.DisplayMessage("Updated Balance: $" + currentAccount.Balance);
+        io.PauseOutput();
+
+    }
+
+    private void UpdateAccountIsActive()
+    {
+        const string ACTIVE = "Active", NOT_ACTIVE = "Not Active", CANCEL = "Cancel";
+        string[] OPTIONS = { ACTIVE, NOT_ACTIVE, CANCEL };
+        string MENU_NAME = $"Update Status for Account No. {currentAccount.AccId}";
+        const int ACTIVE_OPTION = 1, NOT_ACTIVE_OPTION = 2, CANCEL_OPTION = 0;
+
+        bool isRunning = true;
+        while (isRunning)
+        {
+            int selection = io.GetMenuSelection(MENU_NAME, OPTIONS);
+            switch (selection)
+            {
+                case ACTIVE_OPTION:
+                    currentAccount.IsActive = true;
+                    isRunning = false;
+                    break;
+                case NOT_ACTIVE_OPTION:
+                    isRunning = false;
+                    currentAccount.IsActive = false;
+                    break;
+                case CANCEL_OPTION:
+                    if (io.Confirm("Cancel Account Status update?"))
+                    {
+                        isRunning = false;
+                    }
+                    break;
+            }
+
+        }
+        Context.SaveChanges();
+        io.DisplayMessage($"Account status is now {currentAccount.IsActive}");
+        io.PauseOutput();
+    }
+
+
 
 
 }

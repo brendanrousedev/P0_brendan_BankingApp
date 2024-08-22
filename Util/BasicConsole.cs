@@ -36,6 +36,7 @@ public interface BasicConsole {
     public void DisplayAccountDeletion(Account account);
     public decimal GetDecimalFromUser();
     public void DisplayTransactionLog(TransactionLog tl);
+    public void DisplayDeleteWarning();
 
 
     
