@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using Newtonsoft.Json;
 using P0_brendan_BankingApp.POCO;
+using Spectre.Console;
 
 /******************************************************************************
 * Author: Brendan Rouse
@@ -45,7 +46,7 @@ public class Program
             lc.Run();
 
             // Once the Run method ends for lc, then the user must have selected the option to exit the program
-            if (io.Confirm("Close the program?"))
+            if (AnsiConsole.Confirm("Close the program?"))
             {
                 isRunning = false;
             }

@@ -1,4 +1,5 @@
 using P0_brendan_BankingApp.POCO;
+using Spectre.Console;
 
 public class IOConsole : BasicConsole
 {
@@ -13,7 +14,7 @@ public class IOConsole : BasicConsole
     public void DisplayGoodbye()
     {
         Clear();
-        Console.WriteLine(@"
+        AnsiConsole.Markup(@"[bold red]
         
  _____                 _ _                
 |  __ \               | | |               
@@ -24,7 +25,7 @@ public class IOConsole : BasicConsole
                                 __/ |     
                                |___/      
 
-        ");
+        [/]");
         Console.WriteLine("\n\nThank you for using the Bank of Arstotzka application");
         Console.WriteLine("The application is now closing.");
         NewLine();
@@ -33,7 +34,7 @@ public class IOConsole : BasicConsole
     public void DisplayGreeting()
     {
         this.Clear();
-        Console.WriteLine(@"
+        AnsiConsole.Markup(@"[bold red]
         
 ______             _             __    ___           _        _       _         
 | ___ \           | |           / _|  / _ \         | |      | |     | |        
@@ -44,7 +45,7 @@ ______             _             __    ___           _        _       _
                                                                                 
                                                                                 
 
-        ");
+        [/]");
         Console.WriteLine("Welcome to The Bank of Arstotzka");
 
     }
