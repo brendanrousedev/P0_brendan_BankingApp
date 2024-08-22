@@ -324,7 +324,7 @@ ______             _             __    ___           _        _       _
         PauseOutput();
     }
 
-    // GetCustomerBynames acts as a mini menu, so more paramters are required
+    // names acts as a mini menu, so more paramters are required
     public Customer GetCustomerByName(P0BrendanBankingDbContext Context, string menuName, string note)
     {
         DisplayMenuName(menuName);
@@ -346,11 +346,6 @@ ______             _             __    ___           _        _       _
                 GetCustomerByName(Context, menuName, note);
             }
         }
-
-        Console.WriteLine(customer.CustomerId);
-        Console.WriteLine(customer.CustomerUsername);
-        Console.WriteLine(customer.PasswordHash);
-        PauseOutput();
 
         return customer;
     }

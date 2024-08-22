@@ -15,10 +15,19 @@ After deposit funds, pauseOutput is used twice
 
 transfer funds does not show both accounts in the transaction
 
+updateAccount has buggy output
+also changes are not saved to DB
 
-
+cannot exit edit account type in account edit
 
 should add method for creating a transaction
+
+add feature to log updates to account balance made by admin
+add feature to add description to a transfer, withdraw, or deposit
+
+CHECK IF FIXED
+
+Delete account does not work
 
 
 FIXED

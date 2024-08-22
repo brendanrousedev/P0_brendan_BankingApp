@@ -116,8 +116,8 @@ public class AccountController
     {
 
         customer = io.GetCustomerByName(Context, "List Customer accounts",
-                        "A list of all the customer's account will be given" +
-                        "\n.Use the Account Id to perform the operation");
+                        "A list of all the customer's account will be given." +
+                        "\nUse the Account Id to perform the operation");
         if (customer == null)
         {
             io.DisplayMessageWithPauseOutput("Could not find the customer");
@@ -169,6 +169,9 @@ public class AccountController
         Account account = Context.Accounts.Find(id);
         Context.Accounts.Remove(account);
         Context.SaveChanges();
+        io.DisplayMenuName("Account Was Deleted");
+        io.DisplayAccountDetails(account);
+        io.PauseOutput();
     }
 
     private void UpdateAccountDetails(int id)

@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.5.002.0
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "P0_brendan_BankingApp", "P0_brendan_BankingApp.csproj", "{3242A3FF-5A6B-4FAD-9B25-3840CB8C6297}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "P0_brendan_BankingApp", "P0_brendan_BankingApp.csproj", "{A4277AFB-1BAF-4637-A12C-7C1659D3DE59}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -11,10 +11,10 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{3242A3FF-5A6B-4FAD-9B25-3840CB8C6297}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{3242A3FF-5A6B-4FAD-9B25-3840CB8C6297}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{3242A3FF-5A6B-4FAD-9B25-3840CB8C6297}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{3242A3FF-5A6B-4FAD-9B25-3840CB8C6297}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A4277AFB-1BAF-4637-A12C-7C1659D3DE59}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A4277AFB-1BAF-4637-A12C-7C1659D3DE59}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A4277AFB-1BAF-4637-A12C-7C1659D3DE59}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A4277AFB-1BAF-4637-A12C-7C1659D3DE59}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
