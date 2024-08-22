@@ -90,7 +90,26 @@ public class AdminController
 
     private void DisplaySummary()
     {
-        throw new NotImplementedException();
+        int customerCount = Context.Customers.Count();
+        int accountCount = Context.Accounts.Count();
+        int checkingCount = Context.Accounts.Where(a => a.AccType == "Checking").Count();
+        int savingsCount = Context.Accounts.Where(a => a.AccType == "Savings").Count();;
+        int loanCount = Context.Accounts.Where(a => a.AccType == "Loan").Count();;
+        int inactiveAccounts = Context.Accounts.Where(a => a.IsActive == false).Count();
+        int openRequestCount = Context.Requests.Where(r => r.Status == "Open").Count();
+
+        const string INDENT = "    ";
+        io.DisplayMenuName("Account Summary");
+        Console.WriteLine($"Total Number of Customers: {customerCount}");
+        Console.WriteLine($"Total Number of Accounts: {accountCount}");
+        Console.WriteLine($"{INDENT}Checking Accounts: {checkingCount}");
+        Console.WriteLine($"{INDENT}Savings Accounts: {savingsCount}");
+        Console.WriteLine($"{INDENT}Loan Accounts: {loanCount}");
+        io.NewLine();
+        Console.WriteLine($"Open Requests: {openRequestCount}");
+        io.PauseOutput();
+
+
     }
 
     private void UpdateAccountDetails()
