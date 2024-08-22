@@ -97,29 +97,30 @@ public class AccountController
 
         const string USERNAME = "Username", ACCOUNT_ID = "Account Id", EXIT = "Cancel";
         string[] options = { USERNAME, ACCOUNT_ID, EXIT };
-        const int USERNAME_O = 1, ACCOUNT_ID_O = 2, EXIT_O = 3;
+        const int USERNAME_O = 1, ACCOUNT_ID_O = 2, EXIT_O = 0;
         string MENU_NAME = $"Find the Account to {purpose} by:";
 
         bool isRunning = true;
         while (isRunning)
         {
+
             int selection = io.GetMenuSelection(MENU_NAME, options);
-            if (selection == USERNAME_O)
+            switch (selection)
             {
-                GetCustomerAccounts(purpose);
-                isRunning = false;
-            }
-            else if (selection == ACCOUNT_ID_O)
-            {
-                FindByAccountId(purpose);
-                isRunning = false;
-            }
-            else if (selection == EXIT_O)
-            {
-                if (io.Confirm($"Cancel {purpose} operation?"))
-                {
+                case USERNAME_O:
+                    GetCustomerAccounts(purpose);
                     isRunning = false;
-                }
+                    break;
+                case ACCOUNT_ID_O:
+                    FindByAccountId(purpose);
+                    isRunning = false;
+                    break;
+                case EXIT_O:
+                    if (io.Confirm($"Cancel {purpose} operation?"))
+                    {
+                        isRunning = false;
+                    }
+                    break;
             }
         }
     }
