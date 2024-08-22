@@ -83,6 +83,7 @@ public class CustomerController
         if (password.Length < 7 || string.IsNullOrEmpty(password))
         {
             Console.WriteLine("Password must be at elast 7 characters long");
+            io.PauseOutput();
         }
         else
         {
@@ -156,10 +157,12 @@ public class CustomerController
         {
             Console.WriteLine("There are no transactions to view");
         }
-        else
-        {
 
+        foreach(var transaction in transactions)
+        {
+            io.DisplayTransactionLog(transaction);
         }
+        io.PauseOutput();
     }
 
     private void TransferFunds()
@@ -229,7 +232,7 @@ public class CustomerController
         if (account == null)
         {
             io.DisplayMessageWithPauseOutput("The account could not be found...");
-            return null;
+            return new Account();
         }
         else
         {

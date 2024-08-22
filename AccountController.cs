@@ -47,36 +47,47 @@ public class AccountController
             {
                 case CHECKING_OPTION:
                     accountType = CHECKING;
+                    isRunning = false;
                     break;
                 case SAVINGS_OPTION:
                     accountType = SAVINGS;
+                    isRunning = false;
                     break;
                 case LOAN_OPTION:
                     accountType = LOAN;
+                    isRunning = false;
                     break;
                 case EXIT_OPTION:
-                    if (!io.Confirm("Cancel creating account and return to the Admin Menu?"))
+                    if (io.Confirm("Cancel creating account and return to the Admin Menu?"))
                     {
-                        continue;
+                        isRunning = false;
                     }
                     break;
             }
 
-            if (!string.IsNullOrEmpty(accountType))
+
             {
                 isRunning = false;
             }
         }
 
-        Account account = new Account();
-        account.AccType = accountType;
-        account.Customer = customer;
-        account.Balance = 0m;
-        account.CustomerId = customer.CustomerId;
-        account.IsActive = true;
+        if (!string.IsNullOrEmpty(accountType))
+        {
+            Account account = new Account();
+            account.AccType = accountType;
+            account.Customer = customer;
+            account.Balance = 0m;
+            account.CustomerId = customer.CustomerId;
+            account.IsActive = true;
 
-        account = AccountDao.CreateAccount(Context, account);
-        io.DisplayAccountCreated(AccountDao.GetAccountById(Context, account.AccId));
+            account = AccountDao.CreateAccount(Context, account);
+            io.DisplayAccountCreated(AccountDao.GetAccountById(Context, account.AccId));
+        }
+
+        else
+        {
+            io.DisplayMessageWithPauseOutput("No account was created...");
+        }
     }
 
     public void AccountSelection(string purpose)
@@ -100,7 +111,8 @@ public class AccountController
             }
             else if (selection == ACCOUNT_ID_O)
             {
-                FindAccountById(purpose);
+                FindByAccountId(purpose);
+                isRunning = false;
             }
             else if (selection == EXIT_O)
             {
@@ -128,23 +140,23 @@ public class AccountController
         else
         {
             io.DisplayAllCustomerAccounts(customer);
-            FindAccountById(purpose);
+            FindByAccountId(purpose);
 
         }
 
     }
 
-    private void FindAccountById(string purpose)
+    private void FindByAccountId(string purpose)
     {
         const string UPDATE = "Update", DELETE = "Delete";
         int id = -1;
         id = io.GetSelectionAsInt($"Enter Account Id to {purpose}");
         if (!AccountDao.CheckIfAccountExists(Context, id))
         {
-            io.DisplayDoesNotExist($"Account #{id}");
+            io.DisplayDoesNotExist($"Account No. {id}");
             if (io.Confirm("Enter another Id?"))
             {
-                FindAccountById(purpose);
+                FindByAccountId(purpose);
             }
         }
 
@@ -285,7 +297,7 @@ public class AccountController
             }
             Context.SaveChanges();
         }
-    
+
         io.DisplayMenuName($"Account No. is now a {currentAccount.AccType} Account");
         io.PauseOutput();
 
@@ -297,12 +309,13 @@ public class AccountController
         io.DisplayMenuName($"Update Balance for Account No. {currentAccount.AccId}");
         decimal amount = io.GetDecimalFromUser();
         currentAccount.Balance = amount;
-        TransactionLog tl = new TransactionLog() {
+        TransactionLog tl = new TransactionLog()
+        {
             AccId = currentAccount.AccId,
             TransactionType = "Adjustment",
             TransactionDate = DateTime.Now,
             Amount = amount
-            
+
         };
         Context.TransactionLogs.Add(tl);
         Context.SaveChanges();

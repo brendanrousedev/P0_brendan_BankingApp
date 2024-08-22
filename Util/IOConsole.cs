@@ -246,7 +246,7 @@ ______             _             __    ___           _        _       _
             PrintInputException(ex);
         }
 
-        return line;
+        return line ?? string.Empty;
 
     }
 
@@ -325,30 +325,36 @@ ______             _             __    ___           _        _       _
     }
 
     // names acts as a mini menu, so more paramters are required
-    public Customer GetCustomerByName(P0BrendanBankingDbContext Context, string menuName, string note)
+    public Customer? GetCustomerByName(P0BrendanBankingDbContext Context, string menuName, string note)
     {
         DisplayMenuName(menuName);
         DisplayNote(note);
         bool isRunning = true;
-        Customer? customer = new Customer();
+        Customer? customer = null;
         NewLine();
-        string username = GetLine("Enter customer username");
-        customer = CustomerDao.GetCustomerByUsername(Context, username);
-        if (customer == null)
+
+        while (isRunning)
         {
-            DisplayDoesNotExist(username);
-            if (!Confirm("Try reentering username?"))
+            string username = GetLine("Enter customer username");
+            customer = CustomerDao.GetCustomerByUsername(Context, username);
+
+            if (customer == null)
             {
-                isRunning = false;
+                DisplayDoesNotExist(username);
+                if (!Confirm("Try reentering username?"))
+                {
+                    isRunning = false;
+                }
             }
             else
             {
-                GetCustomerByName(Context, menuName, note);
+                isRunning = false;
             }
         }
 
         return customer;
     }
+
 
     public void DisplayMessage(string message)
     {
@@ -357,7 +363,7 @@ ______             _             __    ___           _        _       _
 
     public void DisplayAllCustomerAccounts(Customer customer)
     {
-        Console.WriteLine($"{customer.CustomerUsername} has {customer.Accounts.Count}");
+        Console.WriteLine($"{customer.CustomerUsername} has {customer.Accounts.Count} account(s)");
 
         foreach (Account account in customer.Accounts)
         {
@@ -383,7 +389,7 @@ ______             _             __    ___           _        _       _
         catch (FormatException ex)
         {
             PrintInputException(ex);
-            if(Confirm("Enter another value?"))
+            if (Confirm("Enter another value?"))
             {
                 return GetDecimalFromUser();
             }
