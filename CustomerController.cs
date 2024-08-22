@@ -186,6 +186,24 @@ public class CustomerController
         {
             fromAccount.Balance -= amount;
             toAccount.Balance += amount;
+            TransactionLog tl1 = new TransactionLog()
+            {
+                AccId = fromAccount.AccId,
+                TransactionType = "Transfer",
+                TransactionDate = DateTime.Now,
+                Amount = -amount
+            };
+
+            TransactionLog tl2 = new TransactionLog()
+            {
+                AccId = toAccount.AccId,
+                TransactionType = "Transfer",
+                TransactionDate = DateTime.Now,
+                Amount = amount
+            };
+
+            Context.TransactionLogs.Add(tl1);
+            Context.TransactionLogs.Add(tl2);
             Context.SaveChanges();
 
             io.DisplayMenuName("New Account Balances");
@@ -247,7 +265,16 @@ public class CustomerController
                 {
                     account.Balance += amount;
                 }
-                
+                TransactionLog tl = new TransactionLog()
+                {
+                    AccId = account.AccId,
+                    TransactionType = "Withdraw",
+                    TransactionDate = DateTime.Now,
+                    Amount = amount
+                };
+
+                Context.TransactionLogs.Add(tl);
+
                 Context.SaveChanges();
                 io.DisplayMessageWithPauseOutput($"New Account Balance: ${account.Balance}");
                 io.PauseOutput();
@@ -283,12 +310,14 @@ public class CustomerController
                 else
                 {
                     account.Balance -= amount;
-                    TransactionLog tl = new TransactionLog() {
+                    TransactionLog tl = new TransactionLog()
+                    {
                         AccId = account.AccId,
                         TransactionType = "Withdraw",
                         TransactionDate = DateTime.Now,
-                        Amount = amount
+                        Amount = -amount
                     };
+                    Context.TransactionLogs.Add(tl);
                 }
                 Context.SaveChanges();
             }
@@ -297,7 +326,7 @@ public class CustomerController
         io.Clear();
         Console.WriteLine($"New account Balance: ${account.Balance}");
         io.PauseOutput();
-        
+
     }
 
     private void GetAccountDetails()

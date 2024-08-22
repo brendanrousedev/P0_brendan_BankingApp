@@ -15,6 +15,12 @@ After deposit funds, pauseOutput is used twice
 
 transfer funds does not show both accounts in the transaction
 
-transfer does not log both account into a transaction log, must add column
+
+
 
 should add method for creating a transaction
+
+
+FIXED
+transfer does not log both account into a transaction log, must add column
+Fixed by: No need, just add two transactions for the transfer
