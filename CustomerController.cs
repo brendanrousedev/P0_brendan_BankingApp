@@ -192,6 +192,7 @@ public class CustomerController
             io.DisplayAccountDetails(fromAccount);
             io.NewLine();
             io.DisplayAccountDetails(toAccount);
+            io.PauseOutput();
         }
     }
 
@@ -249,6 +250,7 @@ public class CustomerController
                 
                 Context.SaveChanges();
                 io.DisplayMessageWithPauseOutput($"New Account Balance: ${account.Balance}");
+                io.PauseOutput();
             }
         }
 
@@ -281,10 +283,20 @@ public class CustomerController
                 else
                 {
                     account.Balance -= amount;
+                    TransactionLog tl = new TransactionLog() {
+                        AccId = account.AccId,
+                        TransactionType = "Withdraw",
+                        TransactionDate = DateTime.Now,
+                        Amount = amount
+                    };
                 }
                 Context.SaveChanges();
             }
         }
+
+        io.Clear();
+        Console.WriteLine($"New account Balance: ${account.Balance}");
+        io.PauseOutput();
         
     }
 

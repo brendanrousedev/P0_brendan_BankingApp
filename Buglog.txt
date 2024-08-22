@@ -3,3 +3,18 @@ each account has
 
 There are a TON of Null reference warnings
 
+Account details: username has 3 ... 3 what?
+
+Withdraw funds does not have a clean output
+
+customer - withdraw funds does not correctly display accountId
+
+withdraw funds should also display what amount was withdraw
+
+After deposit funds, pauseOutput is used twice
+
+transfer funds does not show both accounts in the transaction
+
+transfer does not log both account into a transaction log, must add column
+
+should add method for creating a transaction
