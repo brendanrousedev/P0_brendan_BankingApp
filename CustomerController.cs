@@ -187,7 +187,7 @@ public class CustomerController
             fromAccount.Balance -= amount;
             toAccount.Balance += amount;
             Context.SaveChanges();
-            
+
             io.DisplayMenuName("New Account Balances");
             io.DisplayAccountDetails(fromAccount);
             io.NewLine();
@@ -201,7 +201,7 @@ public class CustomerController
         int INVALID_ID = -1;
         io.DisplayAllCustomerAccounts(customer);
         int id = io.GetSelectionAsInt("Enter the account Id for the transaction");
-        if (INVALID_ID == -1 && io.Confirm("Enter another Id?"))
+        if (INVALID_ID == id && io.Confirm("Enter another Id?"))
         {
             GetAccount();
         }
@@ -292,5 +292,6 @@ public class CustomerController
     {
         io.DisplayMenuName($"All Accounts for {customer.CustomerUsername}");
         io.DisplayAllCustomerAccounts(customer);
+        io.PauseOutput();
     }
 }
