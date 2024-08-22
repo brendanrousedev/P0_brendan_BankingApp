@@ -80,7 +80,28 @@ public class AdminController
 
     private void ApproveCheckbook()
     {
+        int openRequestCount = Context.Requests.Where(r => r.Status == "Open").Count();
+        if (openRequestCount <= 0)
+        {
+            Console.WriteLine("There are no open checkbook requests to approve");
+            io.PauseOutput();
+            return;
+        }
+        foreach(var request in Context.Requests)
+        {
+            if (request.RequestType == "CHECKBOOK" && request.Status == "OPEN")
+            {
+                request.Status = "APPROVED";
+                
+            }
+            
+        }
+        Context.SaveChanges();
+
+        Console.WriteLine($"Approved {openRequestCount} checkbook requests....");
+        io.PauseOutput();
         
+
     }
 
     private void ResetPassword()
