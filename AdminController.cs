@@ -95,7 +95,9 @@ public class AdminController
 
     private void UpdateAccountDetails()
     {
-        throw new NotImplementedException();
+        AccountController ac = new AccountController(Context, admin);
+        const string UPDATE = "Update";
+        ac.AccountSelection(UPDATE);
     }
 
     public void CreateAccount()
@@ -134,16 +136,11 @@ public class AdminController
     }
 
 
-
-    public int CreateCustomer(string username)
-    {
-        throw new NotImplementedException();
-    }
-
     public void DeleteAccount()
     {
         AccountController ac = new AccountController(Context, admin);
-        ac.DeleteAccount();
+        const string DELETE = "Delete";
+        ac.AccountSelection(DELETE);
     }
 
 

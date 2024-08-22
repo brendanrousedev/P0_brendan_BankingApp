@@ -1,5 +1,8 @@
 using System.ComponentModel.Design;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Query.SqlExpressions;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Identity.Client;
 using P0_brendan_BankingApp.POCO;
 
 public class AccountController
@@ -75,12 +78,15 @@ public class AccountController
         io.DisplayAccountCreated(AccountDao.GetAccountById(Context, account.AccId));
     }
 
-    public void DeleteAccount()
+    public void AccountSelection(string purpose)
     {
+        const string UPDATE = "Update";
+        const string DELETE = "Delete";
+
         const string USERNAME = "Username", ACCOUNT_ID = "Account Id", EXIT = "Cancel";
         string[] options = { USERNAME, ACCOUNT_ID, EXIT };
         const int USERNAME_O = 1, ACCOUNT_ID_O = 2, EXIT_O = 3;
-        string MENU_NAME = "Delete account by username or Account Id";
+        string MENU_NAME = $"Find the Account to {purpose} by:";
 
         bool isRunning = true;
         while (isRunning)
@@ -88,30 +94,30 @@ public class AccountController
             int selection = io.GetMenuSelection(MENU_NAME, options);
             if (selection == USERNAME_O)
             {
-                GetCustomerAccounts();
+                GetCustomerAccounts(purpose);
                 isRunning = false;
             }
             else if (selection == ACCOUNT_ID_O)
             {
-                DeleteByAccountId();
+                FindAccountById(purpose);
             }
             else if (selection == EXIT_O)
             {
-                if (io.Confirm("Cancel account deletion?"))
+                if (io.Confirm($"Cancel {purpose} operation?"))
                 {
                     isRunning = false;
                 }
             }
         }
-
-
     }
 
-    private void GetCustomerAccounts()
+
+    private void GetCustomerAccounts(string purpose)
     {
-        customer = io.GetCustomerByName(Context, "List Customer accounts", 
-                        "A list of all the customer's account  " +
-                        "\nwill be given. Use the Account Id to delete");
+
+        customer = io.GetCustomerByName(Context, "List Customer accounts",
+                        "A list of all the customer's account will be given" +
+                        "\n.Use the Account Id to perform the operation");
         if (customer == null)
         {
             io.DisplayMessageWithPauseOutput("Could not find the customer");
@@ -121,34 +127,41 @@ public class AccountController
         else
         {
             io.DisplayAllCustomerAccounts(customer);
-            DeleteByAccountId();
+            FindAccountById(purpose);
 
         }
 
     }
 
-    private void DeleteByAccountId()
+    private void FindAccountById(string purpose)
     {
+        const string UPDATE = "Update", DELETE = "Delete";
         int id = -1;
-        while (true)
+        id = io.GetSelectionAsInt($"Enter Account Id to {purpose}");
+        if (!AccountDao.CheckIfAccountExists(Context, id))
         {
-            id = io.GetSelectionAsInt("Enter Account Id to delete");
-            if (!AccountDao.CheckIfAccountExists(Context, id))
+            io.DisplayDoesNotExist($"Account #{id}");
+            if (!io.Confirm("Enter another Id?"))
             {
-                io.DisplayDoesNotExist($"Account #{id}");
-                if (!io.Confirm("Enter another id?"))
-                {
-                    io.DisplayMenuSwitch("Returning to the Admin menu...");
-                    break;
-                }
+                io.DisplayMenuSwitch("Returning to the Admin menu...");
+                return;
+
             }
             else
             {
-                break;
+                FindAccountById(purpose);
             }
         }
 
-        DeleteByAccountId(id);
+        switch (purpose)
+        {
+            case UPDATE:
+                UpdateAccountDetails(id);
+                break;
+            case DELETE:
+                DeleteByAccountId(id);
+                break;
+        }
     }
 
     private void DeleteByAccountId(int id)
@@ -156,6 +169,119 @@ public class AccountController
         Account account = Context.Accounts.Find(id);
         Context.Accounts.Remove(account);
         Context.SaveChanges();
+    }
+
+    private void UpdateAccountDetails(int id)
+    {
+        Account account = Context.Accounts.Find(id);
+        Account updatedAccount = account;
+        if (account == null)
+        {
+            io.DisplayDoesNotExist($"Account with ID {id}");
+            io.DisplayMenuSwitch("Returning to the admin menu...");
+            return;
+        }
+
+
+        const string ACC_TYPE = "Account Type", BALANCE = "Balance", IS_ACTIVE = "Is Active", EXIT = "Finish Updating";
+        string MENU_NAME = $"Update Account No. {account.AccId} Details for User {account.Customer.CustomerUsername}";
+        string[] OPTIONS = { ACC_TYPE, BALANCE, IS_ACTIVE, EXIT };
+        const int ACC_TYPE_O = 1, BALANCE_O = 2, IS_ACTIVE_O = 3, EXIT_O = 0;
+
+        bool isRunning = true;
+        while (isRunning)
+        {
+            account = Context.Accounts.Find(id);
+            updatedAccount = account;
+
+            io.DisplayMenuName("Update Account Details");
+            int selection = io.GetMenuSelection(MENU_NAME, OPTIONS);
+            if (selection == ACC_TYPE_O)
+            {
+                const string CHECKING = "Checking", SAVINGS = "Savings", LOAN = "Loan", CANCEL = "Cancel";
+                string MENU_NAME_TYPE = $"Select account type for Account No.{account.AccId}";
+                string[] OPTIONS_TYPE = { CHECKING, SAVINGS, LOAN, CANCEL };
+                const int CHECKING_O = 1, SAVINGS_O = 2, LOAN_O = 3, CANCEL_O = 0;
+
+                bool isRunningType = true;
+
+                while (isRunningType)
+                {
+                    int typeSelection = io.GetMenuSelection(MENU_NAME_TYPE, OPTIONS_TYPE);
+                    switch (selection)
+                    {
+                        case CHECKING_O:
+                            updatedAccount.AccType = CHECKING;
+                            break;
+                        case SAVINGS_O:
+                            updatedAccount.AccType = SAVINGS;
+                            break;
+                        case LOAN_O:
+                            updatedAccount.AccType = LOAN;
+                            break;
+                        case EXIT_O:
+                            if (!io.Confirm("Cancel updating the account type?"))
+                            {
+                                continue;
+                            }
+                            break;
+                    }
+
+                    isRunning = false;
+                }
+            }
+            if (selection == BALANCE_O)
+            {
+                decimal amount = io.GetDecimalFromUser();
+                if (amount != 0)
+                {
+                    updatedAccount.Balance = amount;
+                }
+            }
+            if (selection == IS_ACTIVE_O)
+            {
+                Console.WriteLine("Enter 1 for Active, 0 for Not Active");
+                int option = io.GetSelectionAsInt();
+                switch (option)
+                {
+                    case 1:
+                        updatedAccount.IsActive = true;
+                        break;
+                    case 0:
+                        updatedAccount.IsActive = false;
+                        break;
+                    default:
+                        io.DisplayMessage("Invalid Entry");
+                        io.PauseOutput();
+                        break;
+                }
+
+            }
+            if (selection == EXIT_O)
+            {
+                if (io.Confirm($"Finish updating Account No.{account.AccId}?"))
+                {
+                    isRunning = false;
+                }
+            }
+
+            Context.Accounts.Attach(updatedAccount);
+            Context.Entry(updatedAccount).State = EntityState.Modified;
+            Context.SaveChanges();
+            io.DisplayMenuName($"Account Id {updatedAccount.AccId} Was Modifed");
+            io.NewLine();
+            io.DisplayMessage("Before");
+            io.DisplayAccountDetails(account);
+            io.NewLine();
+            io.DisplayMessage("After");
+            io.DisplayAccountDetails(updatedAccount);
+            io.PauseOutput();
+
+
+        }
+
+        io.DisplayMenuSwitch("Returning to the Admin menu...");
+
     }
 
 

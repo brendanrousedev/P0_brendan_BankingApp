@@ -376,4 +376,25 @@ ______             _             __    ___           _        _       _
         Console.WriteLine($"Successfully deleted Account #{account.AccId}");
         PauseOutput();
     }
+
+    public decimal GetDecimalFromUser()
+    {
+        decimal value = 0m;
+        try
+        {
+            Console.Write("Enter amount: $");
+            value = Convert.ToDecimal(Console.ReadLine());
+        }
+        catch (FormatException ex)
+        {
+            PrintInputException(ex);
+            if(Confirm("Enter another value?"))
+            {
+                return GetDecimalFromUser();
+            }
+        }
+
+        return value;
+
+    }
 }

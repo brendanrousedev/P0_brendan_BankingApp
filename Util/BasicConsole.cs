@@ -34,6 +34,7 @@ public interface BasicConsole {
     public void DisplayAllCustomerAccounts(Customer customer);
     public int GetSelectionAsInt(string message);
     public void DisplayAccountDeletion(Account account);
+    public decimal GetDecimalFromUser();
 
 
     
