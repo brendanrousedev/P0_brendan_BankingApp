@@ -22,10 +22,12 @@ public class CustomerController
 
     const string CONFIRM_EXIT = "Return to the main menu?";
     Customer? customer;
+    P0BrendanBankingDbContext Context;
 
-    public CustomerController(Customer customer)
+    public CustomerController(P0BrendanBankingDbContext Context, Customer customer)
     {
         this.customer = customer;
+        this.Context = Context;
     }
 
     public void Run()

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using Newtonsoft.Json;
+using P0_brendan_BankingApp.POCO;
 
 /******************************************************************************
 * Author: Brendan Rouse
@@ -22,6 +23,7 @@ public class Program
 {
 
     public BasicConsole io = new IOConsole();
+    P0BrendanBankingDbContext Context = new P0BrendanBankingDbContext();
 
     public static void Main(string[] args)
     {
@@ -39,7 +41,7 @@ public class Program
         // Main while loop for program
         while (isRunning)
         {
-            LoginController lc = new LoginController();
+            LoginController lc = new LoginController(Context);
             lc.Run();
 
             // Once the Run method ends for lc, then the user must have selected the option to exit the program

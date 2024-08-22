@@ -32,6 +32,14 @@ public class AdminController
     // INSERT DAO objects here
     private CustomerDao? customerDao = new CustomerDao(new P0BrendanBankingDbContext());
     private AccountDao? accountDao = new AccountDao(new P0BrendanBankingDbContext());
+    P0BrendanBankingDbContext Context;
+    Admin admin;
+
+    public AdminController(P0BrendanBankingDbContext Context, Admin admin)
+    {
+        this.Context  = Context;
+        this.admin = admin;
+    }
 
     public void Run()
     {
