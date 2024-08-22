@@ -51,7 +51,7 @@ public class CustomerController
                     WithdrawFunds();
                     break;
                 case DEPOSIT_OPTION:
-                    SelectAccount();
+                    DepositFunds();
                     break;
                 case TRANSFER_OPTION:
                     TransferFunds();
@@ -127,7 +127,7 @@ public class CustomerController
                 RequestType = "CHECKBOOK",
                 RequestDate = DateTime.Now,
                 Status = "OPEN"
-                            
+
             };
 
             Context.Requests.Add(request);
@@ -140,33 +140,157 @@ public class CustomerController
 
     private void GetTransactions()
     {
-        throw new NotImplementedException();
+        io.DisplayMenuName("Last Five Transactions");
+        io.DisplayNote("This will display your last 5 transactions"
+                        + "\nacross all of your accounts");
+        io.DisplayAllCustomerAccounts(customer);
+
+
+        var transactions = Context.TransactionLogs
+                            .Where(t => t.AccId == customer.CustomerId)
+                            .OrderByDescending(t => t.TransactionDate)
+                            .Take(5)
+                            .ToList();
+
+        if (transactions.Count() == 0)
+        {
+            Console.WriteLine("There are no transactions to view");
+        }
+        else
+        {
+
+        }
     }
 
     private void TransferFunds()
     {
-        throw new NotImplementedException();
+        Account fromAccount = GetAccount();
+        Account toAccount = GetAccount();
+        if (fromAccount == null || toAccount == null)
+        {
+            io.DisplayMessageWithPauseOutput("Cannot find the account(s)...");
+            return;
+        }
+
+        io.DisplayMenuName($"Transfer Funds from Account No. {fromAccount.AccId} to Account No. {toAccount.AccId}");
+        Console.WriteLine($"Account {fromAccount.AccId} Balance: ${fromAccount.Balance}");
+        Console.WriteLine($"Account {toAccount.AccId} Balance: ${toAccount.Balance}");
+
+        io.NewLine();
+        decimal amount = io.GetAmount("Enter amount to transfer: $");
+        if (amount <= 0)
+        {
+            io.DisplayMessageWithPauseOutput("Cancelling the transfer...");
+        }
+        else
+        {
+            fromAccount.Balance -= amount;
+            toAccount.Balance += amount;
+            Context.SaveChanges();
+            
+            io.DisplayMenuName("New Account Balances");
+            io.DisplayAccountDetails(fromAccount);
+            io.NewLine();
+            io.DisplayAccountDetails(toAccount);
+        }
     }
 
-    private void DepositFunds(Account account)
+    public Account GetAccount()
     {
-        throw new NotImplementedException();
+        io.DisplayMenuName("Select One of Your Accounts");
+        int INVALID_ID = -1;
+        io.DisplayAllCustomerAccounts(customer);
+        int id = io.GetSelectionAsInt("Enter the account Id for the transaction");
+        if (INVALID_ID == -1 && io.Confirm("Enter another Id?"))
+        {
+            GetAccount();
+        }
+
+        Account account = Context.Accounts.Find(id);
+        if (account == null)
+        {
+            io.DisplayMessageWithPauseOutput("The account could not be found...");
+            return null;
+        }
+        else
+        {
+            return account;
+        }
+
 
     }
 
-    private void SelectAccount()
+    private void DepositFunds()
     {
-        throw new NotImplementedException();
+        Account account = GetAccount();
+        if (account == null)
+        {
+            io.DisplayMessage("No account found...");
+            io.PauseOutput();
+            return;
+        }
+        else
+        {
+            decimal amount = io.GetAmount($"Deposit funds into Account No. {account.AccId}");
+            if (amount <= 0m)
+            {
+                io.DisplayMessageWithPauseOutput("Cancelling deposit....");
+            }
+            else
+            {
+                if (account.AccType == "Loan")
+                {
+                    account.Balance -= amount;
+                }
+                else
+                {
+                    account.Balance += amount;
+                }
+                
+                Context.SaveChanges();
+                io.DisplayMessageWithPauseOutput($"New Account Balance: ${account.Balance}");
+            }
+        }
 
     }
 
     private void WithdrawFunds()
     {
-        throw new NotImplementedException();
+        Account account = GetAccount();
+        if (account == null)
+        {
+            io.DisplayDoesNotExist($"Account No. {account.AccId}");
+            io.PauseOutput();
+        }
+        else
+        {
+            if (account.AccType == "Loan")
+            {
+                Console.WriteLine($"Cannot withdraw from this account because it is a Loan");
+            }
+            else
+            {
+                // This method as of now allows account overdraft
+                Console.WriteLine($"Current balance: ${account.Balance}");
+                Console.Write("$Withdraw funds from Account No. {account.AccId}");
+                decimal amount = io.GetDecimalFromUser();
+                if (amount <= 0m)
+                {
+                    io.DisplayMessageWithPauseOutput("Cancelling withdraw....");
+                }
+                else
+                {
+                    account.Balance -= amount;
+                }
+                Context.SaveChanges();
+            }
+        }
+        
     }
 
     private void GetAccountDetails()
     {
-        throw new NotImplementedException();
+        io.DisplayMenuName($"All Accounts for {customer.CustomerUsername}");
+        io.DisplayAllCustomerAccounts(customer);
     }
 }

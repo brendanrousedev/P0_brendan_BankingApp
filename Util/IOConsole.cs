@@ -397,4 +397,13 @@ ______             _             __    ___           _        _       _
         return value;
 
     }
+
+    public void DisplayTransactionLog(TransactionLog tl)
+    {
+        NewLine();
+        Console.WriteLine($"Transaction ID: {tl.TransactionId}");
+        Console.WriteLine($"{INDENT}Type: {tl.TransactionType}");
+        Console.WriteLine($"{INDENT}Transaction Amount: ${tl.Amount}");
+        NewLine();
+    }
 }
