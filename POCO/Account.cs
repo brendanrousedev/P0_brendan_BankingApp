@@ -19,5 +19,4 @@ public partial class Account
 
     public virtual ICollection<Request> Requests { get; set; } = new List<Request>();
     public virtual ICollection<TransactionLog> TransactionLogs { get; set; } = new List<TransactionLog>();
-    
 }

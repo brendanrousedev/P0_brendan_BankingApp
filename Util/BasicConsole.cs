@@ -1,3 +1,4 @@
+using Microsoft.VisualBasic;
 using P0_brendan_BankingApp.POCO;
 
 public interface BasicConsole {
@@ -19,14 +20,21 @@ public interface BasicConsole {
     public bool Confirm(string message);
     public void PrintLoginSuccess();
     public void DisplayReturnToMainMenu();
-    public string GetLineFromUser(string message);
+    public string GetLine(string message);
     public void DisplayDoesNotExist(string username);
     public void DisplayNote(string note);
-    public void PrintMessage(string message);
+    public void DisplayMessageWithPauseOutput(string message);
     public decimal GetAmount(string message);
     public void DisplayAccountDetails(Account account);
     public void DisplaySummary();
-    
+    public void DisplayAccountCreated(Account account);
+    public void DisplayMenuSwitch(string message);
+    public Customer GetCustomerByName(P0BrendanBankingDbContext Context, string menuname, string note);
+    public void DisplayMessage(string message);
+    public void DisplayAllCustomerAccounts(Customer customer);
+    public int GetSelectionAsInt(string message);
+    public void DisplayAccountDeletion(Account account);
+
 
     
 }

@@ -143,8 +143,23 @@ ______             _             __    ___           _        _       _
 
     public int GetSelectionAsInt()
     {
-        Console.Write("Enter a number for you selection: ");
+        Console.Write("Enter a number for your selection: ");
         return Convert.ToInt32(Console.ReadLine());
+    }
+
+    public int GetSelectionAsInt(string message)
+    {
+        Console.Write(message + ": ");
+        try
+        {
+            int selection = Convert.ToInt32(Console.ReadLine());
+            return selection;
+        }
+        catch (FormatException ex)
+        {
+            PrintInputException(ex);
+            return -1;
+        }
     }
 
     public int[] GetValidOptions(string[] options)
@@ -217,7 +232,7 @@ ______             _             __    ___           _        _       _
         DisplayMenuName("Logging out and returning to the main menu...");
     }
 
-    public string GetLineFromUser(string message)
+    public string GetLine(string message)
     {
         NewLine();
         string? line = "";
@@ -235,10 +250,10 @@ ______             _             __    ___           _        _       _
 
     }
 
-    public void DisplayDoesNotExist(string username)
+    public void DisplayDoesNotExist(string message)
     {
         NewLine();
-        Console.WriteLine($"{username} does not exist.");
+        Console.WriteLine($"{message} does not exist.");
     }
 
     public void DisplayNote(string note)
@@ -248,9 +263,11 @@ ______             _             __    ___           _        _       _
         NewLine();
     }
 
-    public void PrintMessage(string message)
+    public void DisplayMessageWithPauseOutput(string message)
     {
+        NewLine();
         Console.WriteLine(message);
+        PauseOutput();
     }
 
     public decimal GetAmount(string message)
@@ -278,13 +295,85 @@ ______             _             __    ___           _        _       _
         Console.WriteLine($"Account Id: {account.AccId}");
         Console.WriteLine($"Account Type: {account.AccType}");
         Console.WriteLine($"Account Balance: ${account.Balance}");
-        Console.WriteLine($"Account is active: {account.IsActive}");
-        Console.WriteLine($"Number of Requests: {account.Requests}");
+        Console.WriteLine($"Account is Active: {account.IsActive}");
+        Console.WriteLine($"Number of Open Requests: {account.Requests}");
         NewLine();
     }
 
     public void DisplaySummary()
     {
         throw new NotImplementedException();
+    }
+
+    public void DisplayAccountCreated(Account account)
+    {
+        Clear();
+        DisplayMenuName($"New Account Created for {account.Customer.CustomerUsername}");
+        Console.WriteLine("Account ID: " + account.AccId);
+        Console.WriteLine("Account Type: " + account.AccType);
+        Console.WriteLine("Is Active: " + account.IsActive);
+        Console.WriteLine("Balance: $" + account.Balance);
+        NewLine();
+        PauseOutput();
+    }
+
+    public void DisplayMenuSwitch(string message)
+    {
+        Clear();
+        Console.WriteLine(message + "...");
+        PauseOutput();
+    }
+
+    // GetCustomerBynames acts as a mini menu, so more paramters are required
+    public Customer GetCustomerByName(P0BrendanBankingDbContext Context, string menuName, string note)
+    {
+        DisplayMenuName(menuName);
+        DisplayNote(note);
+        bool isRunning = true;
+        Customer? customer = new Customer();
+        NewLine();
+        string username = GetLine("Enter customer username");
+        customer = CustomerDao.GetCustomerByUsername(Context, username);
+        if (customer == null)
+        {
+            DisplayDoesNotExist(username);
+            if (!Confirm("Try reentering username?"))
+            {
+                isRunning = false;
+            }
+            else
+            {
+                GetCustomerByName(Context, menuName, note);
+            }
+        }
+
+        Console.WriteLine(customer.CustomerId);
+        Console.WriteLine(customer.CustomerUsername);
+        Console.WriteLine(customer.PasswordHash);
+        PauseOutput();
+
+        return customer;
+    }
+
+    public void DisplayMessage(string message)
+    {
+        Console.WriteLine(message);
+    }
+
+    public void DisplayAllCustomerAccounts(Customer customer)
+    {
+        Console.WriteLine($"{customer.CustomerUsername} has {customer.Accounts.Count}");
+
+        foreach (Account account in customer.Accounts)
+        {
+            DisplayAccountDetails(account);
+        }
+    }
+
+    public void DisplayAccountDeletion(Account account)
+    {
+        Console.Clear();
+        Console.WriteLine($"Successfully deleted Account #{account.AccId}");
+        PauseOutput();
     }
 }

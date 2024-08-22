@@ -1,114 +1,162 @@
+using System.ComponentModel.Design;
+using Microsoft.Extensions.DependencyInjection;
 using P0_brendan_BankingApp.POCO;
 
 public class AccountController
 {
-    BasicConsole? io;
-    AccountDao? accountDao;
+    P0BrendanBankingDbContext Context;
+    Admin admin;
+    BasicConsole io;
+    Customer customer;
 
-
-
-    const string MENU_NAME = "Creating New Account";
-    const int CHECKING_OPTION = 1,
-                SAVINGS_OPTION = 2,
-                LOAN_OPTION = 3,
-                EXIT_OPTION = 0;
-    const string CHECKING = "Checking",
-                SAVINGS = "Savings",
-                LOAN = "Loan",
-                EXIT = "Cancel";
-    const string CONFIRM_EXIT = "Cancel creation of new account?";
-    Customer? Customer;
-
-    public AccountController(Customer customer)
+    public AccountController(P0BrendanBankingDbContext Context, Admin admin, Customer customer)
     {
-        io = new IOConsole();
-        accountDao = new AccountDao(new P0BrendanBankingDbContext());
-        Customer = customer;
-
+        this.Context = Context;
+        this.admin = admin;
+        this.io = new IOConsole();
+        this.customer = customer;
     }
 
-    public void RunCreate()
+    public AccountController(P0BrendanBankingDbContext Context, Admin admin)
     {
-        string[] options = { CHECKING, SAVINGS, LOAN, EXIT };
+        this.Context = Context;
+        this.admin = admin;
+        this.io = new IOConsole();
+    }
+
+    public void RunCreateAccount()
+    {
+
+        const string CHECKING = "Checking", SAVINGS = "Savings", LOAN = "Loan", EXIT = "Cancel";
+        string[] OPTIONS = { CHECKING, SAVINGS, LOAN, EXIT };
+        const int CHECKING_OPTION = 1, SAVINGS_OPTION = 2, LOAN_OPTION = 3, EXIT_OPTION = 0;
+        const string MENU_NAME = "Select the Account Type";
+        string accountType = "";
+
+        bool isRunning = true;
+        while (isRunning)
+        {
+
+            int selection = io.GetMenuSelection(MENU_NAME, OPTIONS);
+
+            switch (selection)
+            {
+                case CHECKING_OPTION:
+                    accountType = CHECKING;
+                    break;
+                case SAVINGS_OPTION:
+                    accountType = SAVINGS;
+                    break;
+                case LOAN_OPTION:
+                    accountType = LOAN;
+                    break;
+                case EXIT_OPTION:
+                    if (!io.Confirm("Cancel creating account and return to the Admin Menu?"))
+                    {
+                        continue;
+                    }
+                    break;
+            }
+
+            if (!string.IsNullOrEmpty(accountType))
+            {
+                isRunning = false;
+            }
+        }
+
+        Account account = new Account();
+        account.AccType = accountType;
+        account.Customer = customer;
+        account.Balance = 0m;
+        account.CustomerId = customer.CustomerId;
+        account.IsActive = true;
+
+        account = AccountDao.CreateAccount(Context, account);
+        io.DisplayAccountCreated(AccountDao.GetAccountById(Context, account.AccId));
+    }
+
+    public void DeleteAccount()
+    {
+        const string USERNAME = "Username", ACCOUNT_ID = "Account Id", EXIT = "Cancel";
+        string[] options = { USERNAME, ACCOUNT_ID, EXIT };
+        const int USERNAME_O = 1, ACCOUNT_ID_O = 2, EXIT_O = 3;
+        string MENU_NAME = "Delete account by username or Account Id";
 
         bool isRunning = true;
         while (isRunning)
         {
             int selection = io.GetMenuSelection(MENU_NAME, options);
-            switch (selection)
+            if (selection == USERNAME_O)
             {
-                case CHECKING_OPTION:
-                    CreateAccount(CHECKING);
-                    break;
-                case SAVINGS_OPTION:
-                    CreateAccount(SAVINGS);
-                    break;
-                case LOAN_OPTION:
-                    CreateAccount(LOAN);
-                    break;
-                case EXIT_OPTION:
-                    if (io.Confirm(CONFIRM_EXIT))
-                    {
-                        isRunning = false;
-                    }
-                    break;
-
+                GetCustomerAccounts();
+                isRunning = false;
             }
-
-            isRunning = false;
-
+            else if (selection == ACCOUNT_ID_O)
+            {
+                DeleteByAccountId();
+            }
+            else if (selection == EXIT_O)
+            {
+                if (io.Confirm("Cancel account deletion?"))
+                {
+                    isRunning = false;
+                }
+            }
         }
 
-        io.PrintMessage("Returning to Admin menu...");
-        io.PauseOutput();
+
     }
 
-    private void CreateAccount(string accountType)
+    private void GetCustomerAccounts()
     {
-
-        
-        if (Customer == null)
+        customer = io.GetCustomerByName(Context, "List Customer accounts", 
+                        "A list of all the customer's account  " +
+                        "\nwill be given. Use the Account Id to delete");
+        if (customer == null)
         {
-            Console.WriteLine("Customer not found.");
-            return;
+            io.DisplayMessageWithPauseOutput("Could not find the customer");
+            io.DisplayMenuSwitch("Returning to the Admin menu...");
+
         }
-
-        Account newAccount = new Account
+        else
         {
-            AccType = accountType,
-            Balance = 0.00m,
-            CustomerId = Customer.CustomerId,
-            Customer = Customer,
-            IsActive = true
-        };
+            io.DisplayAllCustomerAccounts(customer);
+            DeleteByAccountId();
 
-        accountDao.CreateNewAccount(newAccount);
-        
-
-        io.PrintMessage($"Created {newAccount.AccType} account for {newAccount.Customer.CustomerUsername}");
-        io.PauseOutput();
+        }
 
     }
 
-    public void RunDelete()
+    private void DeleteByAccountId()
     {
-        io.DisplayMenuName($"Delete account for {Customer.CustomerUsername}");
-        Console.WriteLine("Number of accounts: " + Customer.Accounts.Count);
-        io.PauseOutput();
-        foreach (var account in Customer.Accounts)
+        int id = -1;
+        while (true)
         {
-            Console.WriteLine($"Account Id: {account.AccId} - Account type: {account.AccType}");
-            io.PauseOutput();
+            id = io.GetSelectionAsInt("Enter Account Id to delete");
+            if (!AccountDao.CheckIfAccountExists(Context, id))
+            {
+                io.DisplayDoesNotExist($"Account #{id}");
+                if (!io.Confirm("Enter another id?"))
+                {
+                    io.DisplayMenuSwitch("Returning to the Admin menu...");
+                    break;
+                }
+            }
+            else
+            {
+                break;
+            }
         }
 
-        // TODO: Encapsulate this in IOConsole
-        Console.Write("Enter the account id to delete: ");
-        int id = Convert.ToInt32(Console.ReadLine());
-        accountDao.DeleteAccountById(id);
-        Console.WriteLine($"Account {id} and all related transactions and requests were deleted...");
-        io.PauseOutput();
-
-
+        DeleteByAccountId(id);
     }
+
+    private void DeleteByAccountId(int id)
+    {
+        Account account = Context.Accounts.Find(id);
+        Context.Accounts.Remove(account);
+        Context.SaveChanges();
+    }
+
+
 }
-

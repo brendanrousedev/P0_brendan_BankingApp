@@ -29,15 +29,12 @@ public class AdminController
                 EXIT = "Exit to Main Menu";
 
     const string CONFIRM_EXIT = "Return to the main menu?";
-    // INSERT DAO objects here
-    private CustomerDao? customerDao = new CustomerDao(new P0BrendanBankingDbContext());
-    private AccountDao? accountDao = new AccountDao(new P0BrendanBankingDbContext());
     P0BrendanBankingDbContext Context;
     Admin admin;
 
     public AdminController(P0BrendanBankingDbContext Context, Admin admin)
     {
-        this.Context  = Context;
+        this.Context = Context;
         this.admin = admin;
     }
 
@@ -103,92 +100,52 @@ public class AdminController
 
     public void CreateAccount()
     {
-        string? username = "";
-        int customerId = -1;
-        Customer? customer = null;
-
         io.DisplayMenuName("Create a New Account");
-        io.DisplayNote("If the customer does not yet exist in the database,\n" +
-                       "you will be given an opportunity to create that Customer.");
+        io.DisplayNote("If the customer does not already exist, you will be able to create them" +
+                        "\nin the database. After that, enter their username again to Create their account.");
 
-        username = io.GetLineFromUser("Enter the username for the customer");
-
-        // Check if the username was entered
-        if (string.IsNullOrEmpty(username))
-        {
-            Console.WriteLine("Username cannot be empty.");
-            return;
-        }
-
-        customer = customerDao.GetCustomerByUsername(username);
-
+        string username = io.GetLine("Enter Customer username");
+        Customer customer = CustomerDao.GetCustomerByUsername(Context, username);
         if (customer == null)
         {
             io.DisplayDoesNotExist(username);
-            if (io.Confirm($"Add {username} to the database?"))
+            if (io.Confirm($"Add {username} to the Customer Database?"))
             {
-                customerId = CreateCustomer(username);
-                customer = customerDao.GetCustomerById(customerId); // Re-fetch the newly created customer by ID
+                byte[] salt = PasswordUtils.GenerateSalt();
+                customer = new Customer()
+                {
+                    CustomerUsername = username,
+                    Salt = salt,
+                    PasswordHash = PasswordUtils.HashPassword("password1", salt)
+                };
+                Context.Customers.Add(customer);
+                Context.SaveChanges();
+                io.DisplayMessageWithPauseOutput($"{username} was added to the database." +
+                                "\nEnter the username again to create an account");
             }
-            else
-            {
-                Console.WriteLine("Customer creation cancelled.");
-                return;
-            }
-        }
-
-        if (customer != null)
-        {
-            AccountController ac = new AccountController(customer);
-            ac.RunCreate();
 
         }
         else
         {
-            Console.WriteLine("Failed to retrieve or create customer.");
+            AccountController ac = new AccountController(Context, admin, customer);
+            ac.RunCreateAccount();
         }
+
     }
+
+
 
     public int CreateCustomer(string username)
     {
-        io.DisplayMenuName("Create a New Customer");
-        Customer newCustomer = new Customer();
-        newCustomer.CustomerUsername = username;
-
-        // All new customers will be assigned 'password1' and will have the opportunity to reset their password
-        string password = "password1";
-        byte[] salt = PasswordUtils.GenerateSalt();
-        newCustomer.PasswordHash = PasswordUtils.HashPassword(password, salt);
-        newCustomer.Salt = salt;
-
-
-        return customerDao.CreateNewCustomer(newCustomer);
+        throw new NotImplementedException();
     }
 
     public void DeleteAccount()
     {
-        io.DisplayMenuName("Delete Account");
-        string username = io.GetLineFromUser("Enter a customer username: ");
-        
-            Customer customer = customerDao.GetCustomerByUsername(username);
-            if (customer == null)
-            {
-                io.DisplayDoesNotExist(username);
-                io.PauseOutput();
-            }
-
-            if (customer != null)
-            {
-                AccountController ac = new AccountController(customer);
-                ac.RunDelete();
-
-            }
-            else
-            {
-                Console.WriteLine("Failed to retrieve or create customer.");
-            }
-        
+        AccountController ac = new AccountController(Context, admin);
+        ac.DeleteAccount();
     }
+
 
 
 

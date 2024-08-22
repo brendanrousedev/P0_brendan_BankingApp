@@ -1,41 +1,28 @@
-using Microsoft.EntityFrameworkCore;
 using P0_brendan_BankingApp.POCO;
 
-public class AccountDao 
+public static class AccountDao
 {
-    P0BrendanBankingDbContext? Context;
-    BasicConsole io; 
-
-    public AccountDao(P0BrendanBankingDbContext context)
+    public static Account CreateAccount(P0BrendanBankingDbContext Context, Account account)
     {
-        Context = context;
-        io = new IOConsole();
-    }
-
-    public int CreateNewAccount(Account account)
-    {
-        // THIS LINE IS CRUCIAL
-        Context.Entry(account.Customer).State = EntityState.Unchanged;
         Context.Accounts.Add(account);
         Context.SaveChanges();
-
-        return account.AccId;
+        return Context.Accounts.Find(account.AccId);
     }
 
-    public void DeleteAccountById(int id)
-    {
-        // TODO: Modify Database to use triggers
-        Context.Database.ExecuteSqlRaw("DELETE FROM TransactionLog WHERE AccId = {0}", id);
-        Context.Database.ExecuteSqlRaw("DELETE FROM Request WHERE AccId = {0}", id);
-        Account account = GetAccountById(id);
-        Context.Accounts.Remove(account);
-        Context.SaveChanges();
-    }
-
-    public Account GetAccountById(int id)
+    public static Account GetAccountById(P0BrendanBankingDbContext Context, int id)
     {
         return Context.Accounts.Find(id);
     }
 
+    public static void DeleteAccountById(P0BrendanBankingDbContext Context, int id)
+    {
+        Context.Remove(id);
+        Context.SaveChanges();
+    }
 
+    public static bool CheckIfAccountExists(P0BrendanBankingDbContext Context, int id)
+    {
+        Account account = Context.Accounts.Find(id); 
+        return account != null;
+    }
 }
