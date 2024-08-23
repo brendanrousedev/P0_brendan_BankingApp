@@ -89,6 +89,11 @@ public class Program
 
                 }
             }
+            else
+            {
+                AnsiConsole.MarkupLine("[red]Please check your password and username and try again.[/]");
+                Console.ReadKey();
+            }
 
             
             
