@@ -129,6 +129,7 @@ public class Program
         var password = AnsiConsole.Prompt(
             new TextPrompt<string>($"Enter {userType} password:")
                 .PromptStyle("green")
+                .Secret('*')
                 .Validate(input =>
                 {
                     return input.Length > 0

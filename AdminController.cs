@@ -142,6 +142,7 @@ public class AdminController
             byte[] salt = PasswordUtils.GenerateSalt();
             customer.PasswordHash = PasswordUtils.HashPassword(defaultPassword, salt);
             customer.Salt = salt;
+            Context.SaveChanges();
             Console.WriteLine();
             AnsiConsole.Markup($"[blue] Password is now set to the default for {username}. Enter any key to continue...[/]");
             

@@ -1,36 +1,51 @@
-When viewing account details, it does nto correctly show the number of requests
-each account has
+Bug Report Template
+===================
 
-MAKE SURE TO delete all REQUESTS AND TRANSACTIONS WHen account is Deleted
+Bug Description: [Unique identifier for the bug]
 
-There are a TON of Null reference warnings
+Title: [Short, descriptive title of the bug]
 
-Account details: username has 3 ... 3 what?
+Description:
+------------
+[Detailed description of the bug, including what the bug is and where it occurs]
 
-Withdraw funds does not have a clean output
+Steps to Reproduce:
+-------------------
+1. [Step 1]
+2. [Step 2]
+3. [Step 3]
+...
 
-customer - withdraw funds does not correctly display accountId
+Expected Result:
+----------------
+[What you expected to happen]
 
-withdraw funds should also display what amount was withdraw
+Actual Result:
+--------------
+[What actually happened]
 
-After deposit funds, pauseOutput is used twice
+===================
 
-transfer funds does not show both accounts in the transaction
+Bug Description: [Unique identifier for the bug]
 
-cannot exit edit account type in account edit
+Title: [Short, descriptive title of the bug]
 
-should add method for creating a transaction
+Description:
+------------
+[Detailed description of the bug, including what the bug is and where it occurs]
 
-add feature to log updates to account balance made by admin
-add feature to add description to a transfer, withdraw, or deposit
+Steps to Reproduce:
+-------------------
+1. [Step 1]
+2. [Step 2]
+3. [Step 3]
+...
 
-CHECK IF FIXED
+Expected Result:
+----------------
+[What you expected to happen]
 
-Delete account does not work
+Actual Result:
+--------------
+[What actually happened]
 
-A user can withdraw money from any account ID entered
-
-
-FIXED
-transfer does not log both account into a transaction log, must add column
-Fixed by: No need, just add two transactions for the transfer
