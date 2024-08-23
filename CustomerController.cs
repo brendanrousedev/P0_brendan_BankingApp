@@ -78,41 +78,28 @@ public class CustomerController
                     }
                     break;
             }
+            Console.ReadKey();
         }
     }
 
     private void RequestCheckbook()
     {
-        var accountId = AnsiConsole.Prompt(
-            new TextPrompt<int>("What is the Account ID?")
-                        .PromptStyle("green")
-                        .ValidationErrorMessage("[red]That's not a valid Id.[/]")
-                        .Validate(amount =>
-                        {
-                            return amount switch
-                            {
-                                _ => ValidationResult.Success(),
-
-                            };
-                        }));
         Account account = GetAccount();
         if (account == null)
         {
             AnsiConsole.MarkupLine("[red]Cannot find the account. Returning to customer menu...[/]");
-            Console.ReadKey();
             return;
         }
         else if (account.AccType == "Savings" || account.AccType == "Loan")
         {
             AnsiConsole.MarkupLine("[red]Cannot Request a checkbook for this account type. Returning to Customer menu...[/]");
-            Console.ReadKey();
             return;
         }
-        else if (account.CustomerId == customer.CustomerId)
+        else if (account.CustomerId != customer.CustomerId)
         {
             AnsiConsole.MarkupLine("[red]This account does not belong to you. Cannot request checkbook.[/]");
             AnsiConsole.WriteLine("\nPress any key to return to the customer menu...");
-            Console.ReadKey();
+            return;
         }
 
         const int DEFAULT_ADMIN_ID = 2; // Right now only one admin exists in the database. AdminId is 2
@@ -161,7 +148,7 @@ public class CustomerController
         {
             AnsiConsole.MarkupLine("[red]Your password was incorrect.[/]");
             AnsiConsole.WriteLine("\nPress any key to return to the customer menu...");
-            Console.ReadKey();
+            
             return;
         }
 
@@ -188,7 +175,7 @@ public class CustomerController
         {
             AnsiConsole.MarkupLine("[red]Your passwords do not match.[/]");
             AnsiConsole.WriteLine("\nPress any key to return to the customer menu...");
-            Console.ReadKey();
+            
             return;
         }
 
@@ -199,7 +186,7 @@ public class CustomerController
         AnsiConsole.WriteLine();
         AnsiConsole.MarkupLine("[blue]Your password was successfully changed![/]");
         AnsiConsole.WriteLine("\nPress any key to return to the customer menu...");
-        Console.ReadKey();
+        
 
 
     }
@@ -222,7 +209,7 @@ public class CustomerController
         }
 
         AnsiConsole.WriteLine("\nPress any key to return to the customer menu...");
-        Console.ReadKey();
+        
 
     }
 
@@ -233,7 +220,7 @@ public class CustomerController
         {
             AnsiConsole.MarkupLine("[red]The account does not exist...[/]");
             AnsiConsole.WriteLine("\nPress any key to return to the customer menu...");
-            Console.ReadKey();
+            
             return;
         }
         else if (fromAccount.CustomerId != customer.CustomerId)
@@ -256,7 +243,7 @@ public class CustomerController
         {
             AnsiConsole.MarkupLine("[red]The account does not exist...[/]");
             AnsiConsole.WriteLine("\nPress any key to return to the customer menu...");
-            Console.ReadKey();
+            
             return;
         }
         else if (toAccount.CustomerId != customer.CustomerId)
@@ -266,7 +253,7 @@ public class CustomerController
                 AnsiConsole.MarkupLine("[yellow]Cancelling the transfer...[/]");
                 AnsiConsole.WriteLine();
                 AnsiConsole.WriteLine("\nPress any key to return to the customer menu...");
-                Console.ReadKey();
+                
                 return;
             }
         }
@@ -328,6 +315,7 @@ public class CustomerController
         AnsiConsoleHelper.WritePartialAccountDetails(toAccount);
         AnsiConsole.WriteLine();
         AnsiConsole.WriteLine("\nPress any key to return to the customer menu...");
+        
 
 
     }
@@ -339,7 +327,7 @@ public class CustomerController
         {
             AnsiConsole.MarkupLine("[red]The account does not exist...[/]");
             AnsiConsole.WriteLine("\nPress any key to return to the customer menu...");
-            Console.ReadKey();
+            
             return;
 
         }
@@ -350,7 +338,7 @@ public class CustomerController
                 AnsiConsole.MarkupLine("[yellow]Cancelling the deposit...[/]");
                 AnsiConsole.WriteLine();
                 AnsiConsole.WriteLine("\nPress any key to return to the customer menu...");
-                Console.ReadKey();
+                
                 return;
             }
 
@@ -391,10 +379,10 @@ public class CustomerController
         Context.SaveChanges();
 
         AnsiConsole.WriteLine();
-        AnsiConsole.MarkupLine($"[blue]Your new account balance: ${account.Balance}");
+        AnsiConsole.MarkupLine($"[blue]Your new account balance: ${account.Balance}[/]");
         AnsiConsole.WriteLine();
         AnsiConsole.WriteLine("\nPress any key to return to the customer menu...");
-        Console.ReadKey();
+        
 
     }
 
@@ -405,7 +393,7 @@ public class CustomerController
         {
             AnsiConsole.MarkupLine("[red]The account does not exist...[/]");
             AnsiConsole.WriteLine("\nPress any key to return to the customer menu...");
-            Console.ReadKey();
+            
             return;
 
         }
@@ -414,6 +402,7 @@ public class CustomerController
             AnsiConsole.MarkupLine("[red]Cannot perform withdraw because the account doesn't belong to you.[/]");
             AnsiConsole.WriteLine();
             AnsiConsole.WriteLine("\nPress any key to return to the customer menu...");
+            
             return;
         }
 
@@ -462,7 +451,7 @@ public class CustomerController
         AnsiConsole.MarkupLine($"[blue]Your new account balance: ${account.Balance}[/]");
         AnsiConsole.WriteLine();
         AnsiConsole.WriteLine("\nPress any key to return to the customer menu...");
-        Console.ReadKey();
+        
 
 
     }
@@ -479,6 +468,6 @@ public class CustomerController
             AnsiConsole.WriteLine();
         }
         AnsiConsole.WriteLine("\nPress any key to return to the customer menu...");
-        Console.ReadKey();
+        
     }
 }

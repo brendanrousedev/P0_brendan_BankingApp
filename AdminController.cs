@@ -344,7 +344,7 @@ public class AdminController
         account.IsActive = isActive;
         Context.SaveChanges();
         AnsiConsole.WriteLine();
-        AnsiConsole.MarkupLine($"[blue]Successfully updated Is Active: {account.IsActive}. Press any key to return to the menu...");
+        AnsiConsole.MarkupLine($"[blue]Successfully updated Is Active: {account.IsActive}. Press any key to return to the menu...[/]");
     }
 
     private void RunDeleteAccount()
@@ -358,7 +358,7 @@ public class AdminController
         {
             AnsiConsoleHelper.WriteAllAccountDetails(account);
             AnsiConsole.WriteLine();
-            AnsiConsole.MarkupLine("[red]WARNING: Account deletion will also delete all related transactions and requests.");
+            AnsiConsole.MarkupLine("[red]WARNING: Account deletion will also delete all related transactions and requests.[/]");
             AnsiConsole.WriteLine();
             if (AnsiConsole.Confirm("Are you sure you want to delete this account?"))
             {
@@ -386,7 +386,7 @@ public class AdminController
             }
             else
             {
-                AnsiConsole.MarkupLine("[yellow]Account deletion was cancelled. Press any key to return to the main menu...");
+                AnsiConsole.MarkupLine("[yellow]Account deletion was cancelled. Press any key to return to the main menu...[/]");
                 Console.ReadKey();
             }
         }
