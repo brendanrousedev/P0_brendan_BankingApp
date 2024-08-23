@@ -6,8 +6,7 @@ public static class AnsiConsoleHelper
     public static void WriteCouldNotFindInDb(string message)
     {
         AnsiConsole.MarkupLine($"[red]Error: Could not locate {message}...[/]");
-                    AnsiConsole.MarkupLine("[red]Enter any key to return to the menu...[/]");
-                    Console.ReadKey();
+        Console.ReadKey();
     }
 
     public static void WriteReturningToMainManu()
@@ -19,7 +18,7 @@ public static class AnsiConsoleHelper
     public static void WriteAllAccountDetails(Account account)
     {
         var table = new Table();
-        const string ACC_ID = "AccId", 
+        const string ACC_ID = "AccId",
             CUSTOMER_NAME = "CustomerUsername",
             CUSTOMER_ID = "CustomerId",
             ACC_TYPE = "AccType",
@@ -47,7 +46,7 @@ public static class AnsiConsoleHelper
     public static void WritePartialAccountDetails(Account account)
     {
         var table = new Table();
-        const string ACC_ID = "AccId", 
+        const string ACC_ID = "AccId",
             ACC_TYPE = "AccType",
             BALANCE = "Balance",
             IS_ACTIVE = "Is Active";

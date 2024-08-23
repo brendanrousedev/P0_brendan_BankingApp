@@ -1,5 +1,6 @@
 using System.Diagnostics.CodeAnalysis;
 using System.Security.AccessControl;
+using Microsoft.SqlServer.Server;
 using P0_brendan_BankingApp.POCO;
 using Spectre.Console;
 
@@ -198,13 +199,24 @@ public class AdminController
                              + "\n****************");
         AnsiConsole.WriteLine();
         AnsiConsole.WriteLine();
-        var accountId = AnsiConsole.Prompt(new TextPrompt<string>("Enter Account ID: ")
-                        .PromptStyle("green"));
-        Account? account = Context.Accounts.Find(accountId);
+        var accountId = AnsiConsole.Prompt(
+            new TextPrompt<decimal>("What is the Account ID?")
+                        .PromptStyle("green")
+                        .ValidationErrorMessage("[red]That's not a valid Id.[/]")
+                        .Validate(amount =>
+                        {
+                            return amount switch
+                            {
+                                _ => ValidationResult.Success(),
+
+                            };
+                        }));
+        var account = Context.Accounts.Find((int)accountId);
+
 
         if (account == null)
         {
-            AnsiConsoleHelper.WriteCouldNotFindInDb($"Account with Id {accountId}");
+            AnsiConsoleHelper.WriteCouldNotFindInDb($"Account with Id {(int)accountId}");
             return;
         }
 
@@ -427,6 +439,7 @@ public class AdminController
             {
                 AnsiConsole.MarkupLine("[yellow]Cancelling account creating and returning to Admin menu...[/]");
                 Console.ReadKey();
+                return;
             }
         }
 
@@ -459,7 +472,7 @@ public class AdminController
             AnsiConsole.MarkupLine("[blue]Successfully created the account![/]");
             AnsiConsoleHelper.WriteAllAccountDetails(account);
             AnsiConsole.WriteLine();
-            AnsiConsole.MarkupLine("[blue]Press any key to return to the Admin menu...");
+            AnsiConsole.MarkupLine("[blue]Press any key to return to the Admin menu...[/]");
             Console.ReadKey();
         }
         else
@@ -470,13 +483,23 @@ public class AdminController
 
     private Account GetAccountById()
     {
-        var accountId = AnsiConsole.Prompt(new TextPrompt<string>("Enter Account ID: ")
-                        .PromptStyle("green"));
-        Account? account = Context.Accounts.Find(accountId);
+        var accountId = AnsiConsole.Prompt(
+            new TextPrompt<decimal>("What is the Account ID?")
+                        .PromptStyle("green")
+                        .ValidationErrorMessage("[red]That's not a valid Id.[/]")
+                        .Validate(amount =>
+                        {
+                            return amount switch
+                            {
+                                _ => ValidationResult.Success(),
+
+                            };
+                        }));
+        Account? account = Context.Accounts.Find((int)accountId);
 
         if (account == null)
         {
-            AnsiConsoleHelper.WriteCouldNotFindInDb($"Account with Id {accountId}");
+            AnsiConsoleHelper.WriteCouldNotFindInDb($"Account with Id {(int)accountId}");
             return account;
         }
         else
