@@ -133,7 +133,7 @@ public class AdminController
             AnsiConsoleHelper.WriteCouldNotFindInDb(username);
             return;
         }
-        
+
         if (AnsiConsole.Confirm($"Reset password for {username}?"))
         {
             string defaultPassword = "password1";
@@ -150,8 +150,8 @@ public class AdminController
     private void GetSummary()
     {
         AnsiConsole.WriteLine("********************"
-                             +"\nDatabase Summary"
-                             +"\n*****************");
+                             + "\nDatabase Summary"
+                             + "\n*****************");
         AnsiConsole.WriteLine();
         var tableCount = new Table();
         tableCount.AddColumn("Table");
@@ -194,8 +194,8 @@ public class AdminController
     {
         AnsiConsole.Clear();
         AnsiConsole.WriteLine("******************"
-                            +"\nUpdate Account"
-                             +"\n****************");
+                            + "\nUpdate Account"
+                             + "\n****************");
         AnsiConsole.WriteLine();
         AnsiConsole.WriteLine();
         var accountId = AnsiConsole.Prompt(new TextPrompt<string>("Enter Account ID: ")
@@ -224,7 +224,7 @@ public class AdminController
 
         var choice = AnsiConsole.Prompt(menu);
 
-        switch(choice)
+        switch (choice)
         {
             case TYPE:
                 UpdateAccountType(account);
@@ -236,7 +236,7 @@ public class AdminController
                 UpdateBalance(account);
                 break;
             case CANCEL:
-                if(AnsiConsole.Confirm("Cancel account update?"))
+                if (AnsiConsole.Confirm("Cancel account update?"))
                 {
                     AnsiConsole.WriteLine("Cancelling account update. Press any key to reutn to the Admin menu...");
                     Console.ReadKey();
@@ -245,8 +245,8 @@ public class AdminController
                 break;
         }
 
-        
-        
+
+
     }
 
     private void UpdateBalance(Account account)
@@ -267,17 +267,18 @@ public class AdminController
                         }));
         if (AnsiConsole.Confirm($"Set account balance to ${amount}?"))
         {
-            TransactionLog tl = new TransactionLog {
-                    AccId = account.AccId,
-                    Account = account,
-                    Amount = amount,
-                    TransactionDate = DateTime.Now,
-                    TransactionType = "Adjustment"
+            TransactionLog tl = new TransactionLog
+            {
+                AccId = account.AccId,
+                Account = account,
+                Amount = amount,
+                TransactionDate = DateTime.Now,
+                TransactionType = "Adjustment"
             };
             Context.TransactionLogs.Add(tl);
             account.Balance = amount;
-            
-            
+
+
             Context.SaveChanges();
             AnsiConsole.WriteLine();
             AnsiConsole.MarkupLine($"[blue]Balance Before: ${beforeBalance}[/]");
@@ -299,14 +300,14 @@ public class AdminController
         const string CHECKING = "Checking", SAVINGS = "Savings", LOAN = "Loan";
         var menu = new SelectionPrompt<string>()
                     .Title("******************"
-                    +"\nSetting Account Type"
-                        +"\n******************")
+                    + "\nSetting Account Type"
+                        + "\n******************")
                     .HighlightStyle(new Style(foreground: Color.Green, background: Color.Black))
                     .PageSize(10)
-                    .AddChoices(new [] {
+                    .AddChoices(new[] {
                        CHECKING,
                        SAVINGS,
-                       LOAN 
+                       LOAN
                     });
 
         var choice = AnsiConsole.Prompt(menu);
@@ -341,15 +342,15 @@ public class AdminController
         {
             return;
         }
-        else 
+        else
         {
             AnsiConsoleHelper.WriteAllAccountDetails(account);
             AnsiConsole.WriteLine();
             AnsiConsole.MarkupLine("[red]WARNING: Account deletion will also delete all related transactions and requests.");
             AnsiConsole.WriteLine();
-            if(AnsiConsole.Confirm("Are you sure you want to delete this account?"))
+            if (AnsiConsole.Confirm("Are you sure you want to delete this account?"))
             {
-                foreach(var request in Context.Requests)
+                foreach (var request in Context.Requests)
                 {
                     if (request.AccId == account.AccId)
                     {
@@ -357,7 +358,7 @@ public class AdminController
                     }
                 }
 
-                foreach(var tl in Context.TransactionLogs)
+                foreach (var tl in Context.TransactionLogs)
                 {
                     if (tl.AccId == account.AccId)
                     {
@@ -382,7 +383,89 @@ public class AdminController
 
     private void RunCreateAccount()
     {
-        AnsiConsole.Markup("[red] ERROR: METHOD NOT FINISH[/]");
+        const string CHECKING = "Checking", SAVINGS = "Savings", LOAN = "Loan", CANCEL = "Cancel";
+        var menu = new SelectionPrompt<string>()
+                    .Title("***************************"
+                  + "\nCreate a New Account"
+                  + "\n***************************")
+                  .PageSize(5)
+                  .AddChoices(new[] {
+                    CHECKING,
+                    SAVINGS,
+                    LOAN,
+                    CANCEL
+                  });
+
+        var username = AnsiConsole.Prompt(
+            new TextPrompt<string>($"Enter customer username:")
+                .PromptStyle("green")
+                .Validate(input =>
+                {
+                    return input.Length > 0
+                        ? ValidationResult.Success()
+                        : ValidationResult.Error("[red]Username cannot be empty[/]");
+                }));
+        Customer? customer = Context.Customers.SingleOrDefault(c => c.CustomerUsername == username);
+        if (customer == null)
+        {
+            AnsiConsoleHelper.WriteCouldNotFindInDb(username);
+            if (AnsiConsole.Confirm($"Add {username} as a customer?"))
+            {
+                string defaultPassword = "password1";
+                byte[] salt = PasswordUtils.GenerateSalt();
+                customer = new Customer()
+                {
+                    CustomerUsername = username,
+                    PasswordHash = PasswordUtils.HashPassword(defaultPassword, salt),
+                    Salt = salt
+                };
+
+                Context.Customers.Add(customer);
+                Context.SaveChanges();
+            }
+            else
+            {
+                AnsiConsole.MarkupLine("[yellow]Cancelling account creating and returning to Admin menu...[/]");
+                Console.ReadKey();
+            }
+        }
+
+        var choice = AnsiConsole.Prompt(menu);
+        switch (choice)
+        {
+            case CANCEL:
+                if (AnsiConsole.Confirm("Cancel account creation?"))
+                {
+                    AnsiConsole.MarkupLine("[yellow]Cancelling account creating and returning to Admin menu...[/]");
+                    return;
+                }
+                break;
+        }
+
+        if (AnsiConsole.Confirm($"Create a {choice} account for {username}?"))
+        {
+
+            Account account = new Account()
+            {
+                CustomerId = customer.CustomerId,
+                AccType = choice,
+                Balance = 0m,
+                IsActive = true
+            };
+
+            Context.Accounts.Add(account);
+            Context.SaveChanges();
+            AnsiConsole.WriteLine();
+            AnsiConsole.MarkupLine("[blue]Successfully created the account![/]");
+            AnsiConsoleHelper.WriteAllAccountDetails(account);
+            AnsiConsole.WriteLine();
+            AnsiConsole.MarkupLine("[blue]Press any key to return to the Admin menu...");
+            Console.ReadKey();
+        }
+        else
+        {
+            AnsiConsole.MarkupLine("[yellow]Cancelling account creating and returning to Admin menu...[/]");
+        }
     }
 
     private Account GetAccountById()
