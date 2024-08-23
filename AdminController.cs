@@ -11,8 +11,6 @@ using Spectre.Console;
 *******************************************************************************/
 
 
-
-
 public class AdminController
 {
     P0BrendanBankingDbContext Context;
