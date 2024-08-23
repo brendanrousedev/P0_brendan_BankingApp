@@ -291,6 +291,43 @@ public class CustomerController
             return;
         }
 
+        fromAccount.Balance -= amount;
+        if (toAccount.AccType == "Loan")
+        {
+            toAccount.Balance -= amount;
+        }
+        else
+        {
+            toAccount.Balance += amount;
+        }
+
+        TransactionLog tlFrom = new TransactionLog()
+        {
+            AccId = fromAccount.AccId,
+            TransactionType = "Transfer",
+            TransactionDate = DateTime.Now,
+            Amount = -amount
+        };
+
+        TransactionLog tlTo = new TransactionLog()
+        {
+            AccId = toAccount.AccId,
+            TransactionType = "Transfer",
+            TransactionDate = DateTime.Now,
+            Amount = amount
+        };
+
+        Context.TransactionLogs.Add(tlFrom);
+        Context.TransactionLogs.Add(tlTo);
+        Context.SaveChanges();
+        Console.WriteLine();
+        AnsiConsole.MarkupLine("[blue]Transfer completed![/]");
+        AnsiConsole.WriteLine("Sending Account");
+        AnsiConsoleHelper.WritePartialAccountDetails(fromAccount);
+        AnsiConsole.WriteLine("Receiving Account");
+        AnsiConsoleHelper.WritePartialAccountDetails(toAccount);
+        AnsiConsole.WriteLine();
+        AnsiConsole.WriteLine("\nPress any key to return to the customer menu...");
 
 
     }
@@ -414,7 +451,7 @@ public class CustomerController
             AccId = account.AccId,
             TransactionType = "Withdraw",
             TransactionDate = DateTime.Now,
-            Amount = amount
+            Amount = -amount
         };
 
         account.Balance -= amount;
@@ -422,7 +459,7 @@ public class CustomerController
         Context.SaveChanges();
 
         AnsiConsole.WriteLine();
-        AnsiConsole.MarkupLine($"[blue]Your new account balance: ${account.Balance}");
+        AnsiConsole.MarkupLine($"[blue]Your new account balance: ${account.Balance}[/]");
         AnsiConsole.WriteLine();
         AnsiConsole.WriteLine("\nPress any key to return to the customer menu...");
         Console.ReadKey();
