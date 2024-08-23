@@ -35,7 +35,7 @@ public class AdminController
 
         var menu = new SelectionPrompt<string>()
             .Title("***************************"
-                  + "\nWhat type of user are you?"
+                  + $"\nAdmin menu - {admin.AdminUsername}"
                   + "\n***************************")
             .PageSize(10)
             .HighlightStyle(new Style(foreground: Color.Green, background: Color.Black))
@@ -73,6 +73,12 @@ public class AdminController
                     break;
                 case APPROVE:
                     ApproveAllCheckbookRequests();
+                    break;
+                case EXIT:
+                    if (AnsiConsole.Confirm("Return to the main menu?"))
+                    {
+                        isRunning = false;
+                    }
                     break;
             }
         }
