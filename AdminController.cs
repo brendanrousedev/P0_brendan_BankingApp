@@ -1,3 +1,4 @@
+using System.Diagnostics.CodeAnalysis;
 using System.Security.AccessControl;
 using P0_brendan_BankingApp.POCO;
 using Spectre.Console;
@@ -207,17 +208,197 @@ public class AdminController
             return;
         }
 
+        const string TYPE = "Account Type", IS_ACTIVE = "Active Status", BALANCE = "Balance", CANCEL = "Cancel";
+        var menu = new SelectionPrompt<string>()
+                    .Title("***********************************************************"
+                  + $"\nUpdate Account No. {account.AccId} for {account.Customer.CustomerUsername}"
+                  + "\n****************************************************************")
+                  .PageSize(10)
+                  .HighlightStyle(new Style(foreground: Color.Green, background: Color.Black))
+                  .AddChoices(new[] {
+                        TYPE,
+                        IS_ACTIVE,
+                        BALANCE,
+                        CANCEL,
+                  });
+
+        var choice = AnsiConsole.Prompt(menu);
+
+        switch(choice)
+        {
+            case TYPE:
+                UpdateAccountType(account);
+                break;
+            case IS_ACTIVE:
+                UpdateIsActive(account);
+                break;
+            case BALANCE:
+                UpdateBalance(account);
+                break;
+            case CANCEL:
+                if(AnsiConsole.Confirm("Cancel account update?"))
+                {
+                    AnsiConsole.WriteLine("Cancelling account update. Press any key to reutn to the Admin menu...");
+                    Console.ReadKey();
+                    return;
+                }
+                break;
+        }
+
         
         
     }
 
+    private void UpdateBalance(Account account)
+    {
+        decimal beforeBalance = account.Balance;
+        var amount = AnsiConsole.Prompt(
+            new TextPrompt<decimal>("What is the new account balance? $")
+                        .PromptStyle("green")
+                        .ValidationErrorMessage("[red]That's not a valid number.[/]")
+                        .Validate(amount =>
+                        {
+                            return amount switch
+                            {
+                                < 0m => ValidationResult.Error("Amount cannot be negative.[/]"),
+                                _ => ValidationResult.Success(),
+
+                            };
+                        }));
+        if (AnsiConsole.Confirm($"Set account balance to ${amount}?"))
+        {
+            TransactionLog tl = new TransactionLog {
+                    AccId = account.AccId,
+                    Account = account,
+                    Amount = amount,
+                    TransactionDate = DateTime.Now,
+                    TransactionType = "Adjustment"
+            };
+            Context.TransactionLogs.Add(tl);
+            account.Balance = amount;
+            
+            
+            Context.SaveChanges();
+            AnsiConsole.WriteLine();
+            AnsiConsole.MarkupLine($"[blue]Balance Before: ${beforeBalance}[/]");
+            AnsiConsole.MarkupLine($"[blue]Balance After: ${account.Balance}[/]");
+            AnsiConsole.WriteLine();
+            AnsiConsole.MarkupLine("[blue]Enter any key to return to the menu...[/]");
+            Console.ReadKey();
+        }
+        else
+        {
+            AnsiConsole.Clear();
+            AnsiConsole.MarkupLine("[yellow]Balance was not updated. Press any key to return to the menu...[/]");
+            Console.ReadKey();
+        }
+    }
+
+    private void UpdateAccountType(Account account)
+    {
+        const string CHECKING = "Checking", SAVINGS = "Savings", LOAN = "Loan";
+        var menu = new SelectionPrompt<string>()
+                    .Title("******************"
+                    +"\nSetting Account Type"
+                        +"\n******************")
+                    .HighlightStyle(new Style(foreground: Color.Green, background: Color.Black))
+                    .PageSize(10)
+                    .AddChoices(new [] {
+                       CHECKING,
+                       SAVINGS,
+                       LOAN 
+                    });
+
+        var choice = AnsiConsole.Prompt(menu);
+        AnsiConsole.WriteLine();
+        if (AnsiConsole.Confirm($"Set the account type to {choice}?"))
+        {
+            account.AccType = choice;
+            Context.SaveChanges();
+            AnsiConsole.MarkupLine($"[blue]Account type was set to {choice}! Press any key to return to the menu...[/]");
+            Console.ReadKey();
+        }
+        else
+        {
+            AnsiConsole.MarkupLine("[yellow]The account type was not updated. Press any key to return to the menu...[/]");
+            Console.ReadKey();
+        }
+    }
+
+    private void UpdateIsActive(Account account)
+    {
+        bool isActive = AnsiConsole.Confirm("Is the Account Active?");
+        account.IsActive = isActive;
+        Context.SaveChanges();
+        AnsiConsole.WriteLine();
+        AnsiConsole.MarkupLine($"[blue]Successfully updated Is Active: {account.IsActive}. Press any key to return to the menu...");
+    }
+
     private void RunDeleteAccount()
     {
-        AnsiConsole.Markup("[red] ERROR: METHOD NOT FINISH[/]");
+        Account account = GetAccountById();
+        if (account == null)
+        {
+            return;
+        }
+        else 
+        {
+            AnsiConsoleHelper.WriteAllAccountDetails(account);
+            AnsiConsole.WriteLine();
+            AnsiConsole.MarkupLine("[red]WARNING: Account deletion will also delete all related transactions and requests.");
+            AnsiConsole.WriteLine();
+            if(AnsiConsole.Confirm("Are you sure you want to delete this account?"))
+            {
+                foreach(var request in Context.Requests)
+                {
+                    if (request.AccId == account.AccId)
+                    {
+                        Context.Remove(request);
+                    }
+                }
+
+                foreach(var tl in Context.TransactionLogs)
+                {
+                    if (tl.AccId == account.AccId)
+                    {
+                        Context.Remove(tl);
+                    }
+                }
+
+                Context.Remove(account);
+                Context.SaveChanges();
+                AnsiConsole.WriteLine();
+                AnsiConsole.MarkupLine("[blue]The account was successfully deleted. Press any key to return to the menu...[/]");
+                Console.ReadKey();
+            }
+            else
+            {
+                AnsiConsole.MarkupLine("[yellow]Account deletion was cancelled. Press any key to return to the main menu...");
+                Console.ReadKey();
+            }
+        }
+
     }
 
     private void RunCreateAccount()
     {
         AnsiConsole.Markup("[red] ERROR: METHOD NOT FINISH[/]");
+    }
+
+    private Account GetAccountById()
+    {
+        var accountId = AnsiConsole.Prompt(new TextPrompt<string>("Enter Account ID: ")
+                        .PromptStyle("green"));
+        Account? account = Context.Accounts.Find(accountId);
+
+        if (account == null)
+        {
+            AnsiConsoleHelper.WriteCouldNotFindInDb($"Account with Id {accountId}");
+            return account;
+        }
+        else
+        {
+            return account;
+        }
     }
 }

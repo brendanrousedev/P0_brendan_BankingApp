@@ -16,7 +16,7 @@ public static class AnsiConsoleHelper
         Console.ReadKey();
     }
 
-    public static void WriteAccountDetails(Account account)
+    public static void WriteAllAccountDetails(Account account)
     {
         var table = new Table();
         const string ACC_ID = "AccId", 
@@ -32,5 +32,37 @@ public static class AnsiConsoleHelper
         table.AddColumn(ACC_TYPE);
         table.AddColumn(BALANCE);
         table.AddColumn(IS_ACTIVE);
+
+        table.AddRow(account.AccId.ToString(),
+                account.Customer.CustomerUsername,
+                account.CustomerId.ToString(),
+                account.AccType,
+                "$" + account.Balance.ToString(),
+                account.IsActive.ToString()
+        );
+
+        AnsiConsole.Write(table);
+    }
+
+    public static void WritePartialAccountDetails(Account account)
+    {
+        var table = new Table();
+        const string ACC_ID = "AccId", 
+            ACC_TYPE = "AccType",
+            BALANCE = "Balance",
+            IS_ACTIVE = "Is Active";
+
+        table.AddColumn(ACC_ID);
+        table.AddColumn(ACC_TYPE);
+        table.AddColumn(BALANCE);
+        table.AddColumn(IS_ACTIVE);
+
+        table.AddRow(account.AccId.ToString(),
+                account.AccType,
+                "$" + account.Balance.ToString(),
+                account.IsActive.ToString()
+        );
+
+        AnsiConsole.Write(table);
     }
 }
