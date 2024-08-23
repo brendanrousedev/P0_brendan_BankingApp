@@ -83,6 +83,7 @@ public class AdminController
                     }
                     break;
             }
+            Console.ReadKey();
         }
     }
 
@@ -93,7 +94,7 @@ public class AdminController
         if (openRequestCount == 0)
         {
             AnsiConsole.Markup("[red]There are no open requests. Press any key to return to the Admin menu...[/]");
-            Console.ReadKey();
+            
         }
         else if (AnsiConsole.Confirm($"There are {openRequestCount} request(s) open, approve all?"))
         {
@@ -108,13 +109,13 @@ public class AdminController
             }
             Context.SaveChanges();
             AnsiConsole.Markup($"[blue]All {openRequestCount} request(s) have been approved! Press any key to continue...[/]");
-            Console.ReadKey();
+            
         }
 
         else
         {
             AnsiConsole.Write("No checkbook requests were approved...");
-            Console.ReadKey();
+            
 
         }
     }
@@ -143,7 +144,7 @@ public class AdminController
             customer.Salt = salt;
             Console.WriteLine();
             AnsiConsole.Markup($"[blue] Password is now set to the default for {username}. Enter any key to continue...[/]");
-            Console.ReadKey();
+            
         }
 
     }
@@ -186,7 +187,7 @@ public class AdminController
         AnsiConsole.Write(tableAverage);
         AnsiConsole.WriteLine();
         AnsiConsole.Markup("[blue]Finished querying database. Press any key to continue...[/]");
-        Console.ReadKey();
+        
 
 
     }
@@ -251,7 +252,7 @@ public class AdminController
                 if (AnsiConsole.Confirm("Cancel account update?"))
                 {
                     AnsiConsole.WriteLine("Cancelling account update. Press any key to reutn to the Admin menu...");
-                    Console.ReadKey();
+                    
                     return;
                 }
                 break;
@@ -297,13 +298,13 @@ public class AdminController
             AnsiConsole.MarkupLine($"[blue]Balance After: ${account.Balance}[/]");
             AnsiConsole.WriteLine();
             AnsiConsole.MarkupLine("[blue]Enter any key to return to the menu...[/]");
-            Console.ReadKey();
+            
         }
         else
         {
             AnsiConsole.Clear();
             AnsiConsole.MarkupLine("[yellow]Balance was not updated. Press any key to return to the menu...[/]");
-            Console.ReadKey();
+            
         }
     }
 
@@ -329,12 +330,12 @@ public class AdminController
             account.AccType = choice;
             Context.SaveChanges();
             AnsiConsole.MarkupLine($"[blue]Account type was set to {choice}! Press any key to return to the menu...[/]");
-            Console.ReadKey();
+            
         }
         else
         {
             AnsiConsole.MarkupLine("[yellow]The account type was not updated. Press any key to return to the menu...[/]");
-            Console.ReadKey();
+            
         }
     }
 
@@ -382,12 +383,12 @@ public class AdminController
                 Context.SaveChanges();
                 AnsiConsole.WriteLine();
                 AnsiConsole.MarkupLine("[blue]The account was successfully deleted. Press any key to return to the menu...[/]");
-                Console.ReadKey();
+                
             }
             else
             {
                 AnsiConsole.MarkupLine("[yellow]Account deletion was cancelled. Press any key to return to the main menu...[/]");
-                Console.ReadKey();
+                
             }
         }
 
@@ -438,7 +439,7 @@ public class AdminController
             else
             {
                 AnsiConsole.MarkupLine("[yellow]Cancelling account creating and returning to Admin menu...[/]");
-                Console.ReadKey();
+                
                 return;
             }
         }
@@ -473,7 +474,7 @@ public class AdminController
             AnsiConsoleHelper.WriteAllAccountDetails(account);
             AnsiConsole.WriteLine();
             AnsiConsole.MarkupLine("[blue]Press any key to return to the Admin menu...[/]");
-            Console.ReadKey();
+            
         }
         else
         {
