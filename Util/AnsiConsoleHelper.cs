@@ -64,4 +64,26 @@ public static class AnsiConsoleHelper
 
         AnsiConsole.Write(table);
     }
+
+    public static void WriteTransactionDetails(TransactionLog tl)
+    {
+        var table = new Table();
+        const string TL_ID = "TransActionId",
+            TL_TYPE = "TransactionType",
+            AMOUNT = "Amount",
+            TL_DATE = "TransactionDate";
+
+        table.AddColumn(TL_ID);
+        table.AddColumn(TL_TYPE);
+        table.AddColumn(AMOUNT);
+        table.AddColumn(TL_DATE);
+
+        table.AddRow(tl.TransactionId.ToString(),
+                tl.TransactionType,
+                "$" + tl.Amount.ToString(),
+                tl.TransactionDate.ToString()
+        );
+
+        AnsiConsole.Write(table);
+    }
 }
