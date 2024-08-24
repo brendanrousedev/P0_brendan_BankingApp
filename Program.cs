@@ -116,15 +116,16 @@ public class Program
     public string[] GetCredentials(string userType)
     {
         
-        var username = AnsiConsole.Prompt(
-            new TextPrompt<string>($"Enter {userType} username:")
-                .PromptStyle("green")
-                .Validate(input =>
-                {
-                    return input.Length > 0
-                        ? ValidationResult.Success()
-                        : ValidationResult.Error("[red]Username cannot be empty[/]");
-                }));
+            string username = IOConsole.GetUsername();
+        // var username = AnsiConsole.Prompt(
+        //     new TextPrompt<string>($"Enter {userType} username:")
+        //         .PromptStyle("green")
+        //         .Validate(input =>
+        //         {
+        //             return input.Length > 0
+        //                 ? ValidationResult.Success()
+        //                 : ValidationResult.Error("[red]Username cannot be empty[/]");
+        //         }));
         
         var password = AnsiConsole.Prompt(
             new TextPrompt<string>($"Enter {userType} password:")
