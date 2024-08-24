@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("P0_brendan_BankingApp")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+1aaf867a0ca2fc70d5fd3d40e28aa66c38b62c47")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+37a4eaa7e10b937a82398449c264c4ef52884529")]
 [assembly: System.Reflection.AssemblyProductAttribute("P0_brendan_BankingApp")]
 [assembly: System.Reflection.AssemblyTitleAttribute("P0_brendan_BankingApp")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
